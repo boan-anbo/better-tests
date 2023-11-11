@@ -62,3 +62,11 @@ import {A} from 'test-acts'
 - :heavy_check_mark: **Plan** your tests in a tree structure.
 
 ## Examples
+
+## Glossary
+
+GWT
+: `Given`-`When`-`Then`
+
+Step
+: A reusable component of in a user `story` consists of `GWT`, usually under a `feature`. The same meaning as `act` but used in the context of BDD user stories.

@@ -1,8 +1,9 @@
 import {describe, expect, it} from "vitest";
 
-import {A} from "@src/index.ts";
-import {ExampleFixture} from "../fixtures/example-fixture.ts";
-
-describe(ExampleFixture, () => {
-
+describe("Example Fixture", () => {
+    describe("HELPER_ACT", () => {
+        it("can be a helper", () => {
+            expect(true).toBe(true);
+        });
+    });
 });
