@@ -63,9 +63,8 @@ import {A} from 'test-acts'
 
 ## Examples
 
-```ts
 
-```
+
 
 ## Glossary
 
