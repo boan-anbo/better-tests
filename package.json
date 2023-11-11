@@ -1,0 +1,19 @@
+{
+  "name": "better-tests",
+  "version": "0.0.1",
+  "description": "A set of awesome, lightweight, and framework-agonistic tools to help you write better tests",
+  "private": true,
+
+  "workspaces": [
+    "packages/*"
+  ],
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bo An",
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "^0.34.6"
+  }
+}
