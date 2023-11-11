@@ -29,6 +29,8 @@ export enum ActKindGherkin {
 
 export enum ActKindUserStory {
     STORY = "STORY",
+    FEATURE = "FEATURE",
+    STEP = "STEP",
     AS_A_USER = "AS_A_USER",
     I_WANT_TO = "I_WANT_TO",
     SO_THAT = "SO_THAT",
