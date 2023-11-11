@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "vitest",
-    "build": ""
+    "build": "echo \"build is not configured for package \\\"×\\\", skipping.\""
   },
   "author": "Bo An",
   "license": "ISC",
