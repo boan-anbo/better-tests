@@ -1,18 +1,21 @@
-import {Acts, createActs} from "./acts.ts";
-import {COMMON_ACTS} from "@src/consts.ts";
+import {COMMON_TEST_DESCRIPTIONS, COMMON_TEST_TAGS} from "@src/consts.ts";
+import {IStoryScripts} from "@src/act/story-types.ts";
+import {loadList} from "@src/entrance.ts";
 
 /**
  *
  */
-export const CommonActs = createActs({
-        shouldWork: {
-            describe: COMMON_ACTS.SHOULD_WORK,
-        }
-});
+export const CommonDescribe = loadList(COMMON_TEST_DESCRIPTIONS);
 
-export const customizeCommonBehaviors = <T extends Acts>(behaviors: Partial<T>) => {
+export const CommonTest = loadList(COMMON_TEST_TAGS)
+
+export const customizeCommonTests = <T extends IStoryScripts>(behaviors: T) => {
     return {
-        ...CommonActs,
+        ...CommonDescribe,
         ...behaviors,
     }
 }
+
+
+
+

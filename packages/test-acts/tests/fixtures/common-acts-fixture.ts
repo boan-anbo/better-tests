@@ -1,10 +1,10 @@
-import {Acts} from  "@src/index.ts";
+import {loadScript} from "@src/entrance.ts";
 
-export const CommonActsFixture = Acts.createAct({
-    describe: "Common Acts Fixture",
-    acts: {
+export const CommonActsFixture = loadScript({
+    story: "Common Acts Fixture",
+    scenes: {
         shouldWork: {
-            describe: "Common Acts Should Work"
+            story: "Common Acts Should Work"
         }
     }
 });

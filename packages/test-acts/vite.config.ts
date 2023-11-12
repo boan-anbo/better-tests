@@ -1,8 +1,8 @@
-import {defineConfig} from "vitest/config";
+import {defineConfig, UserConfig} from "vitest/config";
 import * as path from "path";
 import dts from 'vite-plugin-dts';
-
-export default defineConfig({
+import eslintPlugin from "vite-plugin-eslint";
+export const viteConfig: UserConfig = {
     resolve: {
         alias: {
             '@src': path.resolve(__dirname, './src')
@@ -19,7 +19,7 @@ export default defineConfig({
             external: ['./tests']
         }
     },
-    plugins: [dts()],
+    plugins: [dts(), eslintPlugin()],
     test: {
         include: ['**/*.test.tsx', '**/*.test.ts'],
         setupFiles: [
@@ -30,4 +30,5 @@ export default defineConfig({
             include: ['**/*.ts'],
         }
     },
-});
+}
+export default defineConfig(viteConfig);

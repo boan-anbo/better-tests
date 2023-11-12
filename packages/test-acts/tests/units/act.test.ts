@@ -1,19 +1,21 @@
 import {describe, expect, it} from "vitest";
-import {ActFixture as af} from "../fixtures/act-fixture.ts";
+import {StoryTestFixture as af} from "../fixtures/story-test-fixture.ts";
 
-describe(af.describe, () => {
-      it(af.acts.describeAs.describe, () => {
+describe(af.story, () => {
+      it(af.scenes.describeAs.story, () => {
         const randomString = Math.random().toString();
-        expect(af.describeAs((entity) => entity.describe + randomString).toLowerCase()).toBe((af.describe + randomString).toLowerCase());
+        expect(af.tellAs((entity) => entity.story + randomString).toLowerCase()).toBe((af.story + randomString).toLowerCase());
     });
 
-    it(af.acts.describeFully.describe, () => {
-        const describeFullyTestAct = af.acts.describeFully;
-        expect(describeFullyTestAct.describeFully()).toBe("Given that a given is provided, when asked to describe itself fully, then it should describe itself fully");
+    it(af.scenes.describeFully.story, () => {
+        const describeFullyTestAct = af.scenes.describeFully;
+        expect(describeFullyTestAct.long()).toBe("Given that a given is provided, when asked to describe itself fully, then it should describe itself fully");
     })
 
-    it(af.acts.DESCRIBE_FULLY_FALL_BACK.describe, () => {
-        expect(af.acts.DESCRIBE_FULLY_FALL_BACK.describeFully()).toBe(af.acts.DESCRIBE_FULLY_FALL_BACK.describe);
+    it(af.scenes.TELL_LONG_STORY_FALLBACK.story, () => {
+        expect(af.scenes.TELL_LONG_STORY_FALLBACK.long()).toBe(af.scenes.TELL_LONG_STORY_FALLBACK.story);
     })
 
 });
+
+
