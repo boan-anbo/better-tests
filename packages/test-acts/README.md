@@ -1,4 +1,6 @@
-# Test Acts
+# Cantos: Write Better Tests
+
+Or, the poor men's Homer.
 
 Test Acts is a minimalistic, framework-agnostic, typesafe, and lightweight (~3kb) test planner to support your TDD (
 Test-driven Development) and BDD (Behavior-driven Development) workflows.
@@ -63,8 +65,13 @@ import {A} from 'test-acts'
 
 ## Examples
 
+### Use satisfies to get intellisense for UserAct
+```ts
 
 
+```
+
+- It works great with CoPilot because it has a clear structure to infer from.
 
 ## Glossary
 
