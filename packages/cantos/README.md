@@ -1,4 +1,4 @@
-Work in progress, see [tests](packages/test-acts/tests) for working examples
+Work in progress, see [tests](packages/cantos/tests) for working examples
 ---
 
 # Cantos: Write Better Tests
