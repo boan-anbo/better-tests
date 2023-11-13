@@ -55,6 +55,7 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
         return undefined
     }
 
+    // FIXME: broken for new who, context, when, then, so
     long = () => tellStory(this, StoryVersion.LONG);
 
     short = () => tellStory(this, StoryVersion.SHORT)
