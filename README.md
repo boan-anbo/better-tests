@@ -1,5 +1,6 @@
-README WIP, see [tests](packages/cantos/tests) for working examples
----
+[![npm version](https://badge.fury.io/js/cantos.svg)](https://badge.fury.io/js/cantos)
+
+> README WIP, see [tests](packages/cantos/tests) for working examples
 
 # Cantos: Write Better Tests
 
@@ -8,10 +9,23 @@ with easy, and support test-driven and/or behavior-driven development.
 
 ## Quick Start
 
-```ts
+### Installation
 
+```bash
+# NPM
+npm install -D cantos
 
+# Yarn
+yarn add -D cantos
+
+# Pnpm
+pnpm add -D cantos
 ```
+
+### Quick Tutorial: An AI Chat App
+
+https://github.com/boan-anbo/better-tests/blob/c729b6cd25487dc38f4eecd1923b025d0b1cd80b/packages/cantos/tests/tutorials/cantos-basics-mychat.test.ts#L2
+
 
 ## What Cantos does
 
@@ -188,6 +202,12 @@ Sometimes, this is inevitable as part of the process of development, but sometim
 ```
 
 - It works great with CoPilot because it has a clear structure to infer from.
+
+## Tips
+
+### The story instances are protected with read-only types to prevent accidental mutations.
+
+If you need to mutate your stories, change the story scripts, which should be the single source of truth for your stories.
 
 ## Glossary
 
