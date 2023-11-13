@@ -174,7 +174,6 @@ Sometimes, this is inevitable as part of the process of development, but sometim
 ### Helpers
 
 ```ts
-import {A} from 'test-acts'
 ```
 
 - :heavy_check_mark: **Plan** your tests in a tree structure.
