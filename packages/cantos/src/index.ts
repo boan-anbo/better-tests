@@ -1,5 +1,5 @@
-import {UserStory} from "./act/stories.ts";
-import {StoryScript} from "@src/act/story-types.ts";
+import {UserStory} from "@src/stories/stories.ts";
+import {StoryScript} from "@src/stories/story-types.ts";
 
 
 // Re-export entrance methods

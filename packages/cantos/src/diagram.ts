@@ -1,4 +1,4 @@
-import { Story } from "./act/stories";
+import { Story } from "@src/stories/stories";
 
 export const drawEntity = (entity: Story<any>) : string => {
     let mermaidCode = `graph LR\n`;

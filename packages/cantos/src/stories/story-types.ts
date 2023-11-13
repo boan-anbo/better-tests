@@ -1,4 +1,4 @@
-import {CastProfiles, EmptyCast, IStoryScript} from "@src/act/interfaces.ts";
+import {CastProfiles, EmptyCast, IStoryScript} from "@src/stories/interfaces.ts";
 
 
 /**

@@ -1,9 +1,9 @@
-import {Story, TestKind} from "@src/act/stories.ts";
-import {Genres} from "@src/act/story-kinds.ts";
+import {Story, TestKind} from "@src/stories/stories.ts";
+import {Genres} from "@src/stories/story-kinds.ts";
 import {Scenes} from "@src/entrance.ts";
-import {IStoryScripts} from "@src/act/story-types.ts";
-import {StoryStatus} from "@src/act/status.ts";
-import {StoryOptions} from "@src/act/story-options.ts";
+import {IStoryScripts} from "@src/stories/story-types.ts";
+import {StoryStatus} from "@src/stories/status.ts";
+import {StoryOptions} from "@src/stories/story-options.ts";
 
 export interface Test {
     /**

@@ -19,9 +19,11 @@ export const viteConfig: UserConfig = {
             external: ['./tests']
         }
     },
-    plugins: [dts(), eslintPlugin()],
+    plugins: [dts({
+        tsconfigPath: 'tsconfig.build.json'
+    }), eslintPlugin()],
     test: {
-        include: ['**/*.test.tsx', '**/*.test.ts'],
+        include: ['**/*.test.ts'],
         setupFiles: [
             'tests/utils/setup.ts'
         ],
