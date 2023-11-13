@@ -1,15 +1,15 @@
 {
-  "name": "test-acts",
+  "name": "cantos",
   "private": false,
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/test-acts.umd.cjs",
-  "module": "./dist/test-acts.js",
-  "types": "./dist/test-acts.d.ts",
+  "main": "./dist/cantos.umd.cjs",
+  "module": "./dist/cantos.js",
+  "types": "./dist/cantos.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/test-acts.js",
-      "require": "./dist/test-acts.umd.cjs"
+      "import": "./dist/cantos.js",
+      "require": "./dist/cantos.umd.cjs"
     }
   },
   "files": [

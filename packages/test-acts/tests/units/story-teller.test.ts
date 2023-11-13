@@ -4,7 +4,7 @@ import {StoryScript} from "@src/act/story-types.ts";
 import {GenreUserStory} from "@src/act/story-kinds.ts";
 import {StoryTag} from "@src/act/story-options.ts";
 import {TestKinds} from "@src/act/test-kinds.ts";
-import {CommonDescribe, CommonTest} from "@src/index";
+import {CommonScences, CommonTest} from "@src/index";
 
 const storyTellerScript = {
     story: "Story Teller",
@@ -39,8 +39,8 @@ const storyTellerStory = loadScript(storyTellerScript);
 
 
 describe(storyTellerStory.short(), () => {
-    it(CommonDescribe.SHOULD_WORK.story, () => {
-        expect(CommonDescribe.SHOULD_WORK.story).toBe(CommonDescribe.SHOULD_WORK.story);
+    it(CommonScences.SHOULD_WORK.story, () => {
+        expect(CommonScences.SHOULD_WORK.story).toBe(CommonScences.SHOULD_WORK.story);
     });
 
     it(storyTellerStory.scenes.storyTags.tell(), () => {

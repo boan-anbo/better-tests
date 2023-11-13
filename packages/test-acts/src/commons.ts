@@ -5,13 +5,13 @@ import {loadList} from "@src/entrance.ts";
 /**
  *
  */
-export const CommonDescribe = loadList(COMMON_TEST_DESCRIPTIONS);
+export const CommonScences = loadList(COMMON_TEST_DESCRIPTIONS);
 
 export const CommonTest = loadList(COMMON_TEST_TAGS)
 
-export const customizeCommonTests = <T extends IStoryScripts>(behaviors: T) => {
+export const customizeCommonTests = <T extends IStoryScripts<any>>(behaviors: T) => {
     return {
-        ...CommonDescribe,
+        ...CommonScences,
         ...behaviors,
     }
 }

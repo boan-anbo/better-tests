@@ -7,13 +7,16 @@ export * from "./entrance.ts";
 
 // import and export entrance as Acts or A
 import * as entrance from "./entrance.ts";
-import { CommonDescribe, CommonTest, customizeCommonTests } from "./commons.ts";
+import { CommonScences, CommonTest, customizeCommonTests } from "./commons.ts";
 
-export {entrance as Acts, entrance as A};
+// Export entrance as Cantos or C
+export {entrance as Cantos, entrance as C};
 
 
-// Export types
+// Export types for story
 export type { StoryScript, UserStory,}
 
 // export Common Test helpers
-export {CommonDescribe as CD, CommonTest as CT, CommonDescribe, CommonTest, customizeCommonTests}
+export {CommonScences as CS, CommonTest as CT, CommonScences, CommonTest, customizeCommonTests}
+
+// Export types for cast
