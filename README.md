@@ -24,7 +24,7 @@ pnpm add -D cantos
 
 ### Quick Tutorial: An AI Chat App
 
-https://github.com/boan-anbo/better-tests/blob/c729b6cd25487dc38f4eecd1923b025d0b1cd80b/packages/cantos/tests/tutorials/cantos-basics-mychat.test.ts#L2
+https://github.com/boan-anbo/better-tests/blob/c729b6cd25487dc38f4eecd1923b025d0b1cd80b/packages/cantos/tests/tutorials/cantos-basics-mychat.test.ts
 
 
 ## What Cantos does
