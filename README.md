@@ -1,4 +1,4 @@
-Work in progress, see [tests](packages/cantos/tests) for working examples
+README WIP, see [tests](packages/cantos/tests) for working examples
 ---
 
 # Cantos: Write Better Tests
