@@ -2,15 +2,15 @@ import {PartialDeep, ReadonlyDeep} from "type-fest";
 import {ACT_DEFAULT_DESCRIPTIONS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
-import {CastProfiles, EmptyCast, IStory, IStoryScript, Test} from "@src/act/interfaces.ts";
-import {Genres} from "@src/act/story-kinds.ts";
-import {getPath, populateActPath} from "@src/act/utils.ts";
-import {TestKind} from "@src/act/test-kinds.ts";
-import {printTag, printTestTags, tellStory} from "@src/act/storyteller.ts";
-import {IStoryScripts} from "@src/act/story-types.ts";
+import {CastProfiles, EmptyCast, IStory, IStoryScript, Test} from "@src/stories/interfaces.ts";
+import {Genres} from "@src/stories/story-kinds.ts";
+import {getPath, populateActPath} from "@src/stories/utils.ts";
+import {TestKind} from "@src/stories/test-kinds.ts";
+import {printTag, printTestTags, tellStory} from "@src/stories/storyteller.ts";
+import {IStoryScripts} from "@src/stories/story-types.ts";
 import {NameList} from "@src/util-types.ts";
-import {StoryOptions, StoryVersion} from "@src/act/story-options.ts";
-import {StoryStatus} from "@src/act/status.ts";
+import {StoryOptions, StoryVersion} from "@src/stories/story-options.ts";
+import {StoryStatus} from "@src/stories/status.ts";
 
 
 

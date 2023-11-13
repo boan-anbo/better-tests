@@ -1,5 +1,5 @@
 import {COMMON_TEST_DESCRIPTIONS, COMMON_TEST_TAGS} from "@src/consts.ts";
-import {IStoryScripts} from "@src/act/story-types.ts";
+import {IStoryScripts} from "@src/stories/story-types.ts";
 import {loadList} from "@src/entrance.ts";
 
 /**

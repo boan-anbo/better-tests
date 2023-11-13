@@ -1,5 +1,5 @@
 import {loadCast, loadScript, StoryScript} from "@src/index.ts";
-import {CastProfiles} from "@src/act/interfaces.ts";
+import {CastProfiles} from "@src/stories/interfaces.ts";
 
 
 const wizardOfOzCastProfiles = {

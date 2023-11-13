@@ -12,14 +12,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-
+    "outDir": "./dist/",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@src/*": ["./src/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "include": [

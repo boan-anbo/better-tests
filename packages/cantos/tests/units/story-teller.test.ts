@@ -1,9 +1,9 @@
 import {describe, expect, it} from "vitest";
 import {loadScript} from "@src/entrance.ts";
-import {StoryScript} from "@src/act/story-types.ts";
-import {GenreUserStory} from "@src/act/story-kinds.ts";
-import {StoryTag} from "@src/act/story-options.ts";
-import {TestKinds} from "@src/act/test-kinds.ts";
+import {StoryScript} from "@src/stories/story-types.ts";
+import {GenreUserStory} from "@src/stories/story-kinds.ts";
+import {StoryTag} from "@src/stories/story-options.ts";
+import {TestKinds} from "@src/stories/test-kinds.ts";
 import {CommonScences, CommonTest} from "@src/index";
 
 const storyTellerScript = {

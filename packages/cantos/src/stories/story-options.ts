@@ -1,4 +1,4 @@
-import {Genres} from "@src/act/story-kinds.ts";
+import {Genres} from "@src/stories/story-kinds.ts";
 
 export enum StoryVersion {
     NO_PREFERENCE = "NO_PREFERENCE",

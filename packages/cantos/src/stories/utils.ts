@@ -1,4 +1,4 @@
-import {IStory} from "@src/act/interfaces.ts";
+import {IStory} from "@src/stories/interfaces.ts";
 
 export function populatePath<T extends IStory<any>>(entity: T, parentPath?: string): T {
     // Add name to parentPath if any

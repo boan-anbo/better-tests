@@ -1,4 +1,4 @@
-import {TestKinds} from "@src/act/test-kinds.ts";
+import {TestKinds} from "@src/stories/test-kinds.ts";
 
 export const ACT_DEFAULT_DESCRIPTIONS = {
     DEFAULT_NARRATIVE: "The story goes",

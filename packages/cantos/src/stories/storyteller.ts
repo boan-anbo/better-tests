@@ -1,8 +1,8 @@
 import {StoryScript} from "@src/index.ts";
 import {ACT_DEFAULT_DESCRIPTIONS, GWT_DESCRIPTIONS, STORY_TELLER} from "@src/consts.ts";
-import {Story} from "@src/act/stories.ts";
-import {StoryTag, StoryVersion} from "@src/act/story-options.ts";
-import {Test} from "@src/act/interfaces.ts";
+import {Story} from "@src/stories/stories.ts";
+import {StoryTag, StoryVersion} from "@src/stories/story-options.ts";
+import {Test} from "@src/stories/interfaces.ts";
 
 enum STATEMENT_TYPE {
     GIVEN,

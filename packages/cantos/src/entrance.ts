@@ -1,11 +1,11 @@
 // Utility function to map descriptions to act records
 // Utility function to map descriptions to act records
 import {NameList} from "@src/util-types.ts";
-import {Story,  UserNameList, UserStories, UserStory} from "@src/act/stories.ts";
+import {Story,  UserNameList, UserStories, UserStory} from "@src/stories/stories.ts";
 
-import {CastProfiles, IStory, IStoryScript} from "@src/act/interfaces.ts";
-import {IStoryScripts} from "@src/act/story-types.ts";
-import {StoryOptions} from "@src/act/story-options.ts";
+import {CastProfiles, IStory, IStoryScript} from "@src/stories/interfaces.ts";
+import {IStoryScripts} from "@src/stories/story-types.ts";
+import {StoryOptions} from "@src/stories/story-options.ts";
 
 type StoryField = { story: string }
 
