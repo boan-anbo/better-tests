@@ -20,32 +20,33 @@ export interface Test {
     closeIssues?: string[];
 
 }
+
+export interface StoryActor {
+    role?: string;
+    roleBio?: string;
+    /**
+     * The name of the role.
+     */
+    actor?: string;
+    actorBio?: string;
+}
+
+export const EmptyCast = {} as const;
+type KeysOfConst<T> = T extends Record<string, any> ? keyof T : never;
+export type CastProfiles = Record<string, StoryActor>;
+
 /**
  * Bare Act is the base structure for any entity or behavior without methods or nested entities.
  */
-export interface IStoryScript {
+export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
+    scenes?: IStoryScripts<Cast>;
     /**
-     * Description of the entity.
-     *
-     * @remarks
-     * This field is intended to be used as the description of a test.
-     * According to the actual type of entity, it should be worded accordingly.
-     *
-     * @example
-     * ```ts
-     * // For an entity, it should be worded as a noun.
-     * const aDogEntity = createEntity({
-     *   describe: "a dog",
-     * })
-     *
-     * // For a behavior, it should be worded as a verb or an expectation.
-     * const shouldBark = createBehavior({
-     *  describe: "should bark", // alternatively: "barks", "can bark", "barking", etc.
-     *  action: () => {
-     *  // ...
-     *  }
-     *  })
-     * ```
+     * The order of the story among its sibling stories.
+     */
+    order?: number;
+    cast?: Cast;
+    /**
+     * The short version of the story.
      */
     story: string;
     /**
@@ -54,13 +55,6 @@ export interface IStoryScript {
     options?: StoryOptions;
     genre?: Genres;
     tests?: Record<string, Test>
-    /**
-     * The name of a subject in this act.
-     *
-     * @remarks
-     * When used in full description of the act, the subject, if provided, will be inserted as the subject of the description.
-     */
-    protagonist?: string;
     parentPath?: string;
     explain?: string;
     /**
@@ -75,18 +69,23 @@ export interface IStoryScript {
 
     priority?: number;
 
-    context?: IStoryScript[];
-    when?: IStoryScript[];
-    then?: IStoryScript[];
-    scenes?: IStoryScripts;
-    tellAs?: (fn: (entity: Story) => string) => string;
+    context?: IStoryScript<Cast>[];
+
+    when?: IStoryScript<Cast>[];
+
+    then?: IStoryScript<Cast>[];
+
+    who?: KeysOfConst<Cast>[];
+
+
+    tellAs?: (fn: (entity: Story<Cast>) => string) => string;
 }
 
-export interface IStory extends IStoryScript {
-    scenes: Scenes;
+export interface IStory<CAST extends CastProfiles> extends IStoryScript<CAST> {
+    scenes: Scenes<CAST>;
     readonly testId: () => string;
     path: () => string;
-    nextActToDo: () => Story | undefined;
+    nextActToDo: () => Story<CAST> | undefined;
 
     /**
      * Simply tell the story, using teller preference {@link StoryTellingOptions} to decide whether to tell the short or long version.

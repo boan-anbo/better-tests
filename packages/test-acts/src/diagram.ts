@@ -1,11 +1,11 @@
-import {Story} from "@src/act/stories.ts";
+import { Story } from "./act/stories";
 
-export const drawEntity = (entity: Story) : string => {
+export const drawEntity = (entity: Story<any>) : string => {
     let mermaidCode = `graph LR\n`;
     mermaidCode += `  ${entity.story.replace(/\s+/g, '_')}["${entity.story}"]\n`;
 
     for (const actKey in entity.scenes) {
-        if (entity.scenes.hasOwnProperty(actKey)) {
+        if (Object.prototype.hasOwnProperty.call(entity.scenes, actKey)) {
             const act = entity.scenes[actKey];
             mermaidCode += `  ${entity.story.replace(/\s+/g, '_')} --> ${actKey.replace(/\s+/g, '_')}["${act.story}"]\n`;
         }

@@ -12,8 +12,8 @@ export const viteConfig: UserConfig = {
     build: {
         lib: {
             entry: path.resolve(__dirname, './src/index.ts'),
-            name: 'test-acts',
-            fileName: 'test-acts',
+            name: 'cantos',
+            fileName: 'cantos',
         },
         rollupOptions: {
             external: ['./tests']

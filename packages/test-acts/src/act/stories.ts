@@ -2,7 +2,7 @@ import {PartialDeep, ReadonlyDeep} from "type-fest";
 import {ACT_DEFAULT_DESCRIPTIONS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
-import {IStory, IStoryScript, Test} from "@src/act/interfaces.ts";
+import {CastProfiles, EmptyCast, IStory, IStoryScript, Test} from "@src/act/interfaces.ts";
 import {Genres} from "@src/act/story-kinds.ts";
 import {getPath, populateActPath} from "@src/act/utils.ts";
 import {TestKind} from "@src/act/test-kinds.ts";
@@ -11,6 +11,7 @@ import {IStoryScripts} from "@src/act/story-types.ts";
 import {NameList} from "@src/util-types.ts";
 import {StoryOptions, StoryVersion} from "@src/act/story-options.ts";
 import {StoryStatus} from "@src/act/status.ts";
+
 
 
 class StoryScript implements IStoryScript {
@@ -35,9 +36,10 @@ class StoryScript implements IStoryScript {
     }
 }
 
-export class Story extends StoryScript implements IStory {
+
+export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StoryScript implements IStory<CAST> {
     options?: StoryOptions;
-    scenes: Scenes = {};
+    scenes: Scenes<CAST> = {};
     context?: StoryScript[];
     when?: StoryScript[];
     then?: StoryScript[];
@@ -47,9 +49,9 @@ export class Story extends StoryScript implements IStory {
     path = () => getPath(this.story, this.parentPath)
     // get a getter to get test id
     testId = this.path;
-    tellAs: (fn: (entity: Story) => string) => string;
+    tellAs: (fn: (entity: Story<CAST>) => string) => string;
 
-    nextActToDo(): Story | undefined {
+    nextActToDo(): Story<CAST> | undefined {
         return undefined
     }
 
@@ -124,16 +126,18 @@ export class Story extends StoryScript implements IStory {
  *              This generic type allows `ActWithMethods` to be applied to any specific implementation
  *              of `IActRecord`, preserving its unique structure.
  */
-export type UserStory<T extends IStoryScript> = ReadonlyDeep<T> & Story & {
-    scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript ? ReadonlyDeep<UserStory<T['scenes'][K]>> : never };
+export type UserStory<T extends IStoryScript<CAST>, CAST extends CastProfiles > = ReadonlyDeep<T> & Story<CAST> & {
+    scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['scenes'][K], CAST>> : never };
 };
 
-export type UserStories<T extends IStoryScripts> = ReadonlyDeep<{ [K in keyof T]: ReadonlyDeep<UserStory<T[K]>> }>;
+export type UserCast<CAST extends CastProfiles> = ReadonlyDeep<CAST>;
 
-export type UserNameList<T extends NameList> = ReadonlyDeep<{
+export type UserStories<T extends IStoryScripts<CAST>, CAST extends CastProfiles> = ReadonlyDeep<{ [K in keyof T]: ReadonlyDeep<UserStory<T[K], CAST>> }>;
+
+export type UserNameList<T extends NameList, CAST extends CastProfiles> = ReadonlyDeep<{
     [K in keyof T]: ReadonlyDeep<UserStory<{
         story: T[K]
-    }>>
+    }, CAST>>
 }>;
 
 export {TestKind};

@@ -1,6 +1,6 @@
 import {IStory} from "@src/act/interfaces.ts";
 
-export function populatePath<T extends IStory>(entity: T, parentPath?: string): T {
+export function populatePath<T extends IStory<any>>(entity: T, parentPath?: string): T {
     // Add name to parentPath if any
     return {
         ...entity,
@@ -9,7 +9,7 @@ export function populatePath<T extends IStory>(entity: T, parentPath?: string): 
 }
 
 
-export function populateActPath(actor: IStory): IStory {
+export function populateActPath(actor: IStory<any>): IStory<any> {
     const actorPath = actor.story;
     // populate entity acts
     for (const actKey in actor.scenes) {
