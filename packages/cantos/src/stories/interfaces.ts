@@ -69,14 +69,15 @@ export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
 
     priority?: number;
 
+    who?: KeysOfConst<Cast>[];
+
     context?: IStoryScript<Cast>[];
 
     when?: IStoryScript<Cast>[];
 
     then?: IStoryScript<Cast>[];
 
-    who?: KeysOfConst<Cast>[];
-
+    so?: IStoryScript<Cast>[];
 
     tellAs?: (fn: (entity: Story<Cast>) => string) => string;
 }

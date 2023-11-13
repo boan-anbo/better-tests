@@ -48,7 +48,7 @@ function gatherTags(story: Story, tags: StoryTag[]): string {
     return allTags.length > 0 ? printTags(allTags) : '';
 }
 
-export function tellStory(story: Story, version: StoryVersion): string {
+export function tellStory(story: Story<any>, version: StoryVersion): string {
     const opt = story.options;
     let storyText = '';
     switch (version) {
