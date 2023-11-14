@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "test": "vitest",
-    "build": "echo \"build is not configured for package \\\"×\\\", skipping\""
+    "build": "echo \"build is not configured for package \\\"×\\\", skipping\"",
+    "publish": "cd packages/cantos && npm publish --access public && cd ../.."
   },
   "author": "Bo An",
   "license": "ISC",
