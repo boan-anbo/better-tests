@@ -1,39 +1,19 @@
 {
-  "name": "cantos",
+  "name": "mermaid-whisper",
   "private": false,
   "author": "Bo An",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "keywords": [
-    "User Stories",
-    "TDD",
-    "BDD",
-    "Design documents",
-    "Testing",
-    "Jest",
-    "Vitest",
-    "Playwright",
-    "testing-library",
-    "Cucumber",
-    "Gherkin",
-    "Agile",
-    "Scrum",
-    "Unit-testing",
-    "E2E",
-    "Integration Test",
-    "Typescript",
-    "React",
-    "Vue",
-    "Angular",
-    "Svelte"
+    "Mermaid"
   ],
   "type": "module",
-  "main": "./dist/cantos.umd.cjs",
-  "module": "./dist/cantos.js",
+  "main": "./dist/mermaid-whisper.umd.cjs",
+  "module": "./dist/mermaid-whisper.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/cantos.js",
-      "require": "./dist/cantos.umd.cjs"
+      "import": "./dist/mermaid-whisper.js",
+      "require": "./dist/mermaid-whisper.umd.cjs"
     }
   },
   "files": [
@@ -47,8 +27,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "mermaid": "^10.6.1",
-    "publish": "yarn build && npm publish"
+    "mermaid": "^10.6.1"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
@@ -58,17 +37,15 @@
     "@vitest/coverage-v8": "^0.34.6",
     "@vitest/ui": "^1.0.0-beta.4",
     "eslint": "^8.53.0",
-    "type-fest": "^4.7.1",
     "typescript": "^5",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.6.3",
     "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^1.0.0-beta.4",
-    "yaml": "^2.3.4"
+    "vitest": "^1.0.0-beta.4"
   },
   "dependencies": {
-    "mermaid": "^10.6.1",
-    "uuid": "^9.0.1"
+    "cantos": "^0.0.4",
+    "mermaid": "^10.6.1"
   },
   "peerDependencies": {
     "typescript": "^5"

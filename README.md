@@ -6,7 +6,7 @@ Cantos is in eperimental phase with regular breaking changes.
 
 Changelog will be added with `v0.1.0`. Until then, you can
 
-- check the source code for documentation and commits for changelog, and
+- check the [source code](packages/cantos/src) for documentation and commits for changelog, and
 - check [tests](packages/cantos/tests) for current working examples.
 
 # Cantos: Write Better Tests
