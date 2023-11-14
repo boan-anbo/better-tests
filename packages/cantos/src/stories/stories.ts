@@ -1,8 +1,8 @@
 import {PartialDeep, ReadonlyDeep} from "type-fest";
-import {ACT_DEFAULT_DESCRIPTIONS} from "@src/consts.ts";
+import {STORY_DEFAULTS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
-import {CastProfiles, EmptyCast, IStory, IStoryScript, Test} from "@src/stories/interfaces.ts";
+import {CastProfiles, EmptyCast, IStory, IStoryScript, Test, Who} from "@src/stories/interfaces.ts";
 import {Genres} from "@src/stories/story-kinds.ts";
 import {getPath, populateActPath} from "@src/stories/utils.ts";
 import {TestKind} from "@src/stories/test-kinds.ts";
@@ -15,7 +15,7 @@ import {StoryStatus} from "@src/stories/status.ts";
 
 
 class StoryScript implements IStoryScript {
-    story: string = ACT_DEFAULT_DESCRIPTIONS.DEFAULT_NARRATIVE;
+    story: string = STORY_DEFAULTS.DEFAULT_NARRATIVE;
     parentPath?: string | undefined;
     genre?: Genres = Genres.ACT;
     implemented?: boolean = false;
@@ -38,6 +38,7 @@ class StoryScript implements IStoryScript {
 
 
 export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StoryScript implements IStory<CAST> {
+    who?: Who<CAST>[];
     options?: StoryOptions;
     scenes: Scenes<CAST> = {};
     context?: Scenes<CAST>
@@ -76,7 +77,7 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
      * Print the story as a tag, e.g. `[STORY]`
      *
      */
-    printAsTag = () => printTag(this.tell());
+    printStoryAsTag = () => printTag(this.story);
 
     // Get the next act according to the priority and the implementation status of the act.
 

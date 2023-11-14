@@ -1,8 +1,8 @@
 import {Scenes} from "@src/index.ts";
-import {ACT_DEFAULT_DESCRIPTIONS, GWT_DESCRIPTIONS, STORY_TELLER} from "@src/consts.ts";
+import {GWT_DESCRIPTIONS, STORY_DEFAULTS, STORY_TELLER} from "@src/consts.ts";
 import {Story} from "@src/stories/stories.ts";
-import {StoryTag, StoryVersion} from "@src/stories/story-options.ts";
-import {EmptyCast, Test} from "@src/stories/interfaces.ts";
+import {StoryOptions, StoryTag, StoryVersion} from "@src/stories/story-options.ts";
+import {EmptyCast, Test, Who} from "@src/stories/interfaces.ts";
 
 enum STATEMENT_TYPE {
     GIVEN,
@@ -18,6 +18,12 @@ export const printTestTags = (tests: Test[]) => {
     const tags = tests.map(test => test.kind);
     return tags.length > 0 ? printTags(tags) : '';
 }
+
+export const printStory = (who: string, story: string) => joinByStoryTellerSpace([who, story]);
+
+export const joinByStoryTellerSpace = (texts: string[]) => texts.join(STORY_TELLER.SPACE);
+
+export const printWho = (who: Who<any>[] | undefined) => who ? who.join(STORY_TELLER.SPACE) : STORY_DEFAULTS.DEFAULT_WHO
 
 function gatherTags(story: Story, tags: StoryTag[]): string {
     const allTags: string [] = [];
@@ -48,31 +54,40 @@ function gatherTags(story: Story, tags: StoryTag[]): string {
     return allTags.length > 0 ? printTags(allTags) : '';
 }
 
+const tellShortStory = (story: Story<any>): string => {
+    const who = printWho(story.who);
+    const storyText = story.story;
+    return printStory(who, storyText);
+}
+const attachTags = (storyText: string, story: Story<any>, opts?: StoryOptions): string => {
+    if (opts?.teller?.tags) {
+        return gatherTags(story, opts?.teller?.tags) + STORY_TELLER.SPACE + storyText;
+    }
+    return storyText;
+}
 export function tellStory(story: Story<any>, version: StoryVersion): string {
     const opt = story.options;
     let storyText = '';
     switch (version) {
         case StoryVersion.SHORT:
-            storyText = story.story;
+            storyText = tellShortStory(story);
             break;
         case StoryVersion.LONG:
-            storyText = gatherAllActsStatements(story);
+            storyText = tellLongStory(story);
             break;
         // if no preference specified, use the option preference or default to short
         case StoryVersion.NO_PREFERENCE:
         default:
-            storyText = opt?.teller?.prefer === StoryVersion.LONG ? gatherAllActsStatements(story) : story.story;
+            storyText = opt?.teller?.prefer === StoryVersion.LONG ? tellLongStory(story) : tellShortStory(story);
             break;
     }
-    if (opt?.teller?.tags) {
-        storyText = gatherTags(story, opt?.teller?.tags) + STORY_TELLER.SPACE + storyText;
-    }
+    storyText = attachTags(storyText, story, opt);
     return storyText;
 
 
 }
 
-export function getActStatements(acts: Scenes<typeof EmptyCast> | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
+export function tellGWT(acts: Scenes<typeof EmptyCast> | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
 
     const actsLength = acts ? Object.keys(acts).length : 0;
     if (!acts) {
@@ -115,12 +130,12 @@ export function getActStatements(acts: Scenes<typeof EmptyCast> | undefined, pre
     return `${prefix.toLowerCase()} ${actName ? actName + ' ' : ''}${statement}`;
 }
 
-export function gatherAllActsStatements(entity: Story): string {
-    const actName = entity.protagonist ?? ACT_DEFAULT_DESCRIPTIONS.DEFAULT_ACT_NAME;
+export function tellLongStory(entity: Story): string {
+    const actName = entity.protagonist ?? STORY_DEFAULTS.DEFAULT_WHO;
     const statements = [
-        getActStatements(entity.context, STATEMENT_TYPE.GIVEN),
-        getActStatements(entity.when, STATEMENT_TYPE.WHEN),
-        getActStatements(entity.then, STATEMENT_TYPE.THEN, actName),
+        tellGWT(entity.context, STATEMENT_TYPE.GIVEN),
+        tellGWT(entity.when, STATEMENT_TYPE.WHEN),
+        tellGWT(entity.then, STATEMENT_TYPE.THEN, actName),
     ]
 
     const collectedStatements = statements.filter(statement => statement).join(", ").trim();

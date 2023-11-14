@@ -5,7 +5,7 @@ import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryStatus} from "@src/stories/status.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
-export interface Test {
+export interface Test<CAST extends CastProfiles=typeof EmptyCast> {
     /**
      * The type of tests.
      */
@@ -18,6 +18,18 @@ export interface Test {
      * The issues that this test it closes.
      */
     closeIssues?: string[];
+
+    /**
+     * FIXME: Not extending the actual type. Perhaps need a factory function, something like createTest which takes in a createdStory for type inference.
+     * The a function with passed in root story and the current story that has the test, which should return an any to be used as the parameter for expect.
+     */
+    receivedAs?: (rootStory: Story<CAST>, currentStory: Story<CAST>) => any | Promise<any>;
+
+    /**
+     * FIXME: Not extending the actual type.
+     * The a function with passed in root story and the current story that has the test, which should return an any to be used as the parameter for expect.
+     */
+    expectedAs?: (rootStory: Story<CAST>, currentStory: Story<CAST>) => any;
 
 }
 
@@ -32,7 +44,7 @@ export interface StoryActor {
 }
 
 export const EmptyCast = {} as const;
-type KeysOfConst<T> = T extends Record<string, any> ? keyof T : never;
+export type Who<T> = T extends Record<string, any> ? keyof T : never;
 export type CastProfiles = Record<string, StoryActor>;
 
 /**
@@ -40,12 +52,56 @@ export type CastProfiles = Record<string, StoryActor>;
  */
 export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
     /**
-     * The protagonists of the story.
+     * The optional protagonists of the story.
      *
      * @remark
-     * It defaults to "it".
+     * It defaults to inherited who, and if it has not inherited any "who", it will default to "it".
+     *
+     * @example Override who for current story
+     * Use it to override when the story does not make sense with the current parent story.
+     * ```ts
+     * {
+     *     story: "MyApp",
+     *     cast: myAppCast,
+     *     who: ["MyApp"],
+     *     scenes: {
+     *         tellsWeather: {
+     *             story: "tells the weather", // this makes sense without overriding the parent story's "who",
+     *             context: {
+     *             // Suppose tellsWeather features has a requirement that the location service must be enabled.
+     *                 locationServiceEnabled: {
+     *                 // This story does NOT make sense with the parents who--"MyApp" as in "MyApp is enabled" which will be wrong.
+     *                     story: "isEnabled",
+     *                     // So we override it with "LocationService". Now it reads "LocationService is enabled".
+     *                     who: ["LocationService"],
+     *                     }
+     *                 }
+     *             }
+     *         }
+     *     }
+     *```
+     *
+     * @example Write stories in a way that needs no overriding `who`
+     * You usually can avoid overriding who by using active voice and assigning important roles as the subject.
+     * ```ts
+     * const myAppStory = {
+     *  story: "MyApp",
+     *  cast: myAppCast,
+     *  who: ["MyApp"],
+     *  scenes: {
+     *    tellsWeather: {
+     *    story: "tells the weather",
+     *    context: {
+     *     hasLocationServicePrivilege: {
+     *          story: "has location service privilege"
+     *     }
+     *     }
+     *     }
+     * }
+     *
+     * ```
      */
-    who?: KeysOfConst<Cast>[];
+    who?: Who<Cast>[];
     /**
      * Text of the story
      *
