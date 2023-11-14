@@ -5,7 +5,7 @@ import {CastProfiles} from "@src/stories/interfaces.ts";
 const wizardOfOzCastProfiles = {
     Dorothy: {
         role: "Dorothy Gale",
-        roleBio:"A young girl from Kansas who is carried away to the magical Land of Oz in a tornado and embarks on a quest with her new friends to see the Wizard who can help her return home.",
+        roleBio: "A young girl from Kansas who is carried away to the magical Land of Oz in a tornado and embarks on a quest with her new friends to see the Wizard who can help her return home.",
         actor: "Judy Garland",
 
     },
@@ -13,7 +13,7 @@ const wizardOfOzCastProfiles = {
         role: "Scarecrow",
         actor: "Ray Bolger",
     },
-    TinMan : {
+    TinMan: {
         role: "Tin Woodman",
         actor: "Jack Haley",
     },
@@ -32,46 +32,58 @@ const dorothyMeetsTheScarecrow = {
     scenes: {
         DOROTHY_LOST_HER_WAY: {
             story: "Dorothy lost her way",
-            context: [
-                {
+            context: {
+                DorothyOnHerWayToTheCity: {
                     who: ["Dorothy"],
-                    story: "tries to get to Emerald City",
+                    story: "is on her way to the City of Emeralds",
                 }
-            ],
-            when: [
-                {
-                    who: ["Dorothy"],
-                    story: "arrives at a crossroad",
-                }
-            ],
-            then: [
-                {
-                    who: ["Dorothy"],
-                    story: "is confused",
-                }
-            ],
+            }
+            ,
+            when: {
+
+                arrivesAtACrossRoad:
+                    {
+                        who: ["Dorothy"],
+                        story: "arrives at a crossroad",
+                    }
+            },
+            then: {
+
+                wasConfused:
+                    {
+                        who: ["Dorothy"],
+                        story: "is confused",
+                    }
+            }
+            ,
             order: 1,
         },
         SCARECROW_GIVES_DIRECTION: {
             story: "The Scarecrow told Dorothy how to get to Emerald City",
-            context: [
-                {
-                    who: ["Scarecrow"],
-                    story: "standing at the crossroad, and saw Dorothy",
-                }
-            ],
-            when: [
-                {
-                    who: ["Scarecrow"],
-                    story: "told Dorothy which way to go",
-                }
-            ],
-            then: [
-                {
-                    who: ["Dorothy"],
-                    story: "was happy",
-                }
-            ],
+            context: {
+                ScarecrowAtTHeCrossRoad:
+                    {
+                        who: ["Scarecrow"],
+                        story: "standing at the crossroad, and saw Dorothy",
+                    }
+            }
+            ,
+            when: {
+                scareCrowToldDorothy:
+                    {
+                        who: ["Scarecrow"],
+                        story: "told Dorothy which way to go",
+                    }
+            },
+            then: {
+
+                dorothyWasHappy:
+                    {
+                        who: ["Dorothy"],
+                        story: "was happy",
+                    }
+            }
+            ,
             order: 2,
         },
     }
@@ -83,24 +95,27 @@ const dorothyMeetsTheLion = {
     scenes: {
         THREE_IN_THE_FOREST: {
             story: "The three were walking in the forest",
-            context: [
-                {
+            context: {
+                DorothyAndOthersInForest: {
                     who: ["Dorothy", "Scarecrow", "TinMan"],
                     story: "are walking in the forest",
                 }
-            ],
-            when: [
-                {
+            }
+            ,
+            when: {
+                theyHearsARoar: {
                     who: ["Dorothy", "Scarecrow", "TinMan"],
                     story: "hear a roar",
                 }
-            ],
-            then: [
-                {
+            }
+            ,
+            then: {
+                theyAreAfraid: {
                     who: ["Dorothy", "Scarecrow", "TinMan"],
                     story: "are afraid",
                 }
-            ],
+            }
+            ,
             order: 1,
         },
     }
@@ -130,3 +145,6 @@ const dorothyMeetsHerCompanions = {
 
 
 export const wizardOfOzStory = loadScript(dorothyMeetsHerCompanions)
+
+
+
