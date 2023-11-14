@@ -122,41 +122,50 @@ const myChatStory = {
                     // Then, we will use the `context`, `when`, and `who` fields to fully describe the story in more details.
                     //
                     // The context of the story:
-                    context: [
-                        {
-                            who: ["User"],
-                            story: "has been chatting with the AI for a while", // <-- This is the context of this scenario.
-                        },
-                        {
-                            who: ["InternetConnection"], // <-- This is another context of this scenario. This is too trivial to be really useful, but it's here to show that you can have multiple contexts.
-                            story: "is working",
-                        }
-                    ],
+                    context: {
+
+                        userHasChatted:
+                            {
+                                who: ["User"],
+                                story: "has been chatting with the AI for a while", // <-- This is the context of this scenario.
+                            },
+                        hasInternet:
+                            {
+                                who: ["InternetConnection"], // <-- This is another context of this scenario. This is too trivial to be really useful, but it's here to show that you can have multiple contexts.
+                                story: "is working",
+                            }
+                    },
                     // When something happens:
-                    when: [
-                        {
-                            who: ["User"],
-                            story: "sent a new message", // <-- notice how you can ignore the "I" in the sentence because we provided the "who".
-                        },
-                    ],
+                    when: {
+                        userSendsAMessage:
+                            {
+                                who: ["User"],
+                                story: "sent a new message", // <-- notice how you can ignore the "I" in the sentence because we provided the "who".
+                            },
+                    },
                     // Then something else should/can/will happen:
-                    then: [
-                        {
-                            who: ["App", "AI"],
-                            story: "include the previous messages in the new message before sending the bundle to AI", // <-- notice that a step can involve two roles, the App and the AI.
-                        },
-                    ],
+                    then: {
+                        appWrapsMessage:
+                            {
+                                who: ["App", "AI"],
+                                story: "include the previous messages in the new message before sending the bundle to AI", // <-- notice that a step can involve two roles, the App and the AI.
+                            },
+                    },
                     // So that...(the implications, consequences, or benefits etc.)
-                    so: [
-                        {
-                            who: ["AI"],
-                            story: "can understand the context of the conversation",
-                        },
-                        {
-                            who: ["User"],
-                            story: "can feel like the AI is smart",
-                        },
-                    ],
+                    so: {
+                        aiCanUnderstandTheContext:
+                            {
+                                who: ["AI"],
+                                story: "can understand the context of the conversation",
+                            },
+                        userCanChatInContext:
+                            {
+                                who: ["User"],
+                                story:
+                                    "can feel like the AI is smart",
+                            }
+                        ,
+                    },
 
                     // So on and so forth for the rest of the other 3 scenes.
                     //

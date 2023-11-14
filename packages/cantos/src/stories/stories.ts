@@ -40,9 +40,9 @@ class StoryScript implements IStoryScript {
 export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StoryScript implements IStory<CAST> {
     options?: StoryOptions;
     scenes: Scenes<CAST> = {};
-    context?: StoryScript[];
-    when?: StoryScript[];
-    then?: StoryScript[];
+    context?: Scenes<CAST>
+    when?: Scenes<CAST>;
+    then?: Scenes<CAST>;
     status?: StoryStatus | string;
     priority?: number;
 

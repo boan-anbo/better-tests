@@ -1,8 +1,8 @@
-import {StoryScript} from "@src/index.ts";
+import {Scenes} from "@src/index.ts";
 import {ACT_DEFAULT_DESCRIPTIONS, GWT_DESCRIPTIONS, STORY_TELLER} from "@src/consts.ts";
 import {Story} from "@src/stories/stories.ts";
 import {StoryTag, StoryVersion} from "@src/stories/story-options.ts";
-import {Test} from "@src/stories/interfaces.ts";
+import {EmptyCast, Test} from "@src/stories/interfaces.ts";
 
 enum STATEMENT_TYPE {
     GIVEN,
@@ -72,12 +72,13 @@ export function tellStory(story: Story<any>, version: StoryVersion): string {
 
 }
 
-export function getActStatements(acts: StoryScript[] | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
+export function getActStatements(acts: Scenes<typeof EmptyCast> | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
+
+    const actsLength = acts ? Object.keys(acts).length : 0;
     if (!acts) {
         return undefined;
     }
 
-    const actsLength = acts.length;
     if (actsLength === 0) {
         return undefined;
     }
@@ -97,8 +98,8 @@ export function getActStatements(acts: StoryScript[] | undefined, prefixType: ST
             break;
     }
 
-    const statement = acts.map((given, index) => {
-        let statement = given.story.trim();
+    const statement = Object.entries(acts).map(([_, story], index) => {
+        let statement = story.story.trim();
         // there are more than one given
         if (actsLength > 1) {
             // if it's not the first given, add a comma

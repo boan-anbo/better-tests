@@ -14,21 +14,23 @@ export const StoryTestFixture = loadScript({
         },
         describeFully: {
             story: "can be described fully",
-            context: [
+            context: {
+
+                givenProvided:
                 {
                     story: "a given is provided"
                 }
-            ],
-            when: [
-                {
+            },
+            when: {
+                askedToDescribeItselfFully: {
                     story: "asked to describe itself fully"
                 }
-            ],
-            then: [
-                {
+            },
+            then: {
+                shouldDescribeItself: {
                     story: "should describe itself fully"
                 }
-            ]
+            }
         }
     }
 })

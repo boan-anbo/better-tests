@@ -39,16 +39,26 @@ export type CastProfiles = Record<string, StoryActor>;
  * Bare Act is the base structure for any entity or behavior without methods or nested entities.
  */
 export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
+    /**
+     * The protagonists of the story.
+     *
+     * @remark
+     * It defaults to "it".
+     */
+    who?: KeysOfConst<Cast>[];
+    /**
+     * Text of the story
+     *
+     * @remarks
+     * What "who" do(es).
+     */
+    story: string;
     scenes?: IStoryScripts<Cast>;
     /**
      * The order of the story among its sibling stories.
      */
     order?: number;
     cast?: Cast;
-    /**
-     * The short version of the story.
-     */
-    story: string;
     /**
      * Story-by-Story options that can override the global story options.
      */
@@ -69,15 +79,14 @@ export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
 
     priority?: number;
 
-    who?: KeysOfConst<Cast>[];
 
-    context?: IStoryScript<Cast>[];
+    context?: IStoryScripts<Cast>;
 
-    when?: IStoryScript<Cast>[];
+    when?: IStoryScripts<Cast>;
 
-    then?: IStoryScript<Cast>[];
+    then?: IStoryScripts<Cast>;
 
-    so?: IStoryScript<Cast>[];
+    so?: IStoryScripts<Cast>;
 
     tellAs?: (fn: (entity: Story<Cast>) => string) => string;
 }
