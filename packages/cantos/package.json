@@ -2,7 +2,7 @@
   "name": "cantos",
   "private": false,
   "author": "Bo An",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": [
     "User Stories",
     "TDD",
@@ -29,7 +29,7 @@
   "type": "module",
   "main": "./dist/cantos.umd.cjs",
   "module": "./dist/cantos.js",
-  "types": "./dist/cantos.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/cantos.js",
