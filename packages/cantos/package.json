@@ -2,7 +2,7 @@
   "name": "cantos",
   "private": false,
   "author": "Bo An",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "User Stories",
     "TDD",
@@ -47,7 +47,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "mermaid": "^10.6.1"
+    "mermaid": "^10.6.1",
+    "publish": "yarn build && npm publish"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",

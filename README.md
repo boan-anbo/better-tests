@@ -1,6 +1,13 @@
 [![npm version](https://badge.fury.io/js/cantos.svg)](https://badge.fury.io/js/cantos)
 
-> README WIP, see [tests](packages/cantos/tests) for working examples
+# Notes
+
+Cantos is in eperimental phase with regular breaking changes.
+
+Changelog will be added with `v0.1.0`. Until then, you can
+
+- check the source code for documentation and commits for changelog, and
+- check [tests](packages/cantos/tests) for current working examples.
 
 # Cantos: Write Better Tests
 
@@ -24,8 +31,7 @@ pnpm add -D cantos
 
 ### Quick Tutorial: An AI Chat App
 
-https://github.com/boan-anbo/better-tests/blob/77cc7005ab989b258fb5ee377d92f73ed1cd44f6/packages/cantos/tests/tutorials/cantos-basics-mychat.test.ts#L1-L10
-
+See [Basic Tutorial](./packages/cantos/tests/tutorials/cantos-basics-mychat.test.ts).
 
 ## What Cantos does
 
