@@ -1,8 +1,8 @@
 import {TestKinds} from "@src/stories/test-kinds.ts";
 
-export const ACT_DEFAULT_DESCRIPTIONS = {
+export const STORY_DEFAULTS = {
     DEFAULT_NARRATIVE: "The story goes",
-    DEFAULT_ACT_NAME: "it",
+    DEFAULT_WHO: "it",
 }
 
 export const STORY_TELLER = {
