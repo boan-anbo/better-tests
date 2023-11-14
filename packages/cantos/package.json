@@ -2,7 +2,7 @@
   "name": "cantos",
   "private": false,
   "author": "Bo An",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [
     "User Stories",
     "TDD",
@@ -19,7 +19,12 @@
     "Scrum",
     "Unit-testing",
     "E2E",
-    "Integration Test"
+    "Integration Test",
+    "Typescript",
+    "React",
+    "Vue",
+    "Angular",
+    "Svelte"
   ],
   "type": "module",
   "main": "./dist/cantos.umd.cjs",
