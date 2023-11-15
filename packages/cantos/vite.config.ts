@@ -2,6 +2,7 @@ import {defineConfig, UserConfig} from "vitest/config";
 import * as path from "path";
 import dts from 'vite-plugin-dts';
 import eslintPlugin from "vite-plugin-eslint";
+
 export const viteConfig: UserConfig = {
     resolve: {
         alias: {
@@ -12,7 +13,7 @@ export const viteConfig: UserConfig = {
     build: {
         lib: {
             entry: path.resolve(__dirname, './src/index.ts'),
-            name: 'cantos',
+            name: 'Cantos',
             fileName: 'cantos',
         },
         rollupOptions: {
@@ -20,7 +21,8 @@ export const viteConfig: UserConfig = {
         }
     },
     plugins: [dts({
-        tsconfigPath: 'tsconfig.build.json'
+        tsconfigPath: 'tsconfig.build.json',
+        rollupTypes: true
     }), eslintPlugin()],
     test: {
         include: ['**/*.test.ts'],

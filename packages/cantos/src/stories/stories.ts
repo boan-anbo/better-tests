@@ -6,12 +6,11 @@ import {CastProfiles, EmptyCast, IStory, IStoryScript, Test, Who} from "@src/sto
 import {Genres} from "@src/stories/story-kinds.ts";
 import {getPath, populateActPath} from "@src/stories/utils.ts";
 import {TestKind} from "@src/stories/test-kinds.ts";
-import {printTag, printTestTags, tellStory} from "@src/stories/storyteller.ts";
+import {printTag, printTestTags, printWho, tellStory} from "@src/stories/storyteller.ts";
 import {IStoryScripts} from "@src/stories/story-types.ts";
 import {NameList} from "@src/util-types.ts";
 import {StoryOptions, StoryVersion} from "@src/stories/story-options.ts";
 import {StoryStatus} from "@src/stories/status.ts";
-
 
 
 class StoryScript implements IStoryScript {
@@ -47,6 +46,7 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
     status?: StoryStatus | string;
     priority?: number;
 
+    cast?: CAST;
     path = () => getPath(this.story, this.parentPath)
     // get a getter to get test id
     testId = this.path;
@@ -80,6 +80,31 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
     printStoryAsTag = () => printTag(this.story);
 
     // Get the next act according to the priority and the implementation status of the act.
+
+    /**
+     * get all the names of the who
+     */
+    namesOfWho = () => printWho(this.who);
+
+    /**
+     * get the name of a cast member in the who
+     * @param who
+     */
+    nameOfWho = (who: Who<CAST>) => printWho([who]);
+
+    getCasts = () => this.cast;
+
+    profileOfWho = (who: Who<CAST>) => {
+        if (this.cast) {
+            try {
+
+                return this.cast[who];
+            } catch (e) {
+                throw new Error(`Cast ${who} not found in ${this.cast}. Check if you had ${who} in the cast profiles.`)
+            }
+        }
+        throw new Error(`You did not provide a cast for this story.`)
+    }
 
 
     constructor(
@@ -128,7 +153,7 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
  *              This generic type allows `ActWithMethods` to be applied to any specific implementation
  *              of `IActRecord`, preserving its unique structure.
  */
-export type UserStory<T extends IStoryScript<CAST>, CAST extends CastProfiles > = ReadonlyDeep<T> & Story<CAST> & {
+export type UserStory<T extends IStoryScript<CAST>, CAST extends CastProfiles> = ReadonlyDeep<T> & Story<CAST> & {
     scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['scenes'][K], CAST>> : never };
 };
 
