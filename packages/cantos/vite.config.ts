@@ -20,10 +20,13 @@ export const viteConfig: UserConfig = {
             external: ['./tests']
         }
     },
-    plugins: [dts({
-        tsconfigPath: 'tsconfig.build.json',
-        rollupTypes: true
-    }), eslintPlugin()],
+    plugins: [
+        dts({
+            tsconfigPath: 'tsconfig.build.json',
+            rollupTypes: true
+        }),
+        eslintPlugin()
+    ],
     test: {
         include: ['**/*.test.ts'],
         setupFiles: [

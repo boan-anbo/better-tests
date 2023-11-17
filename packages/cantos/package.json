@@ -3,7 +3,7 @@
   "author": "Bo An",
   "version": "0.0.5",
   "keywords": [
-    "User Stories",
+    "User Story",
     "TDD",
     "BDD",
     "Design documents",
@@ -12,7 +12,7 @@
     "Vitest",
     "Playwright",
     "testing-library",
-    "Cucumber",
+    "cucumber.js",
     "Gherkin",
     "Agile",
     "Scrum",

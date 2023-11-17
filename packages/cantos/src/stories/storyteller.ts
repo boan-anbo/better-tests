@@ -32,7 +32,7 @@ function gatherTags(story: Story, tags: StoryTag[]): string {
         let tagText = '';
         switch (tag) {
             case StoryTag.Genre:
-                tagText = story.genre ? story.genre : '';
+                tagText = story.type ? story.type : '';
                 break;
             case StoryTag.Status:
                 tagText = story.status ? story.status : '';
@@ -134,8 +134,8 @@ export function tellLongStory(entity: Story): string {
     const actName = entity.protagonist ?? STORY_DEFAULTS.DEFAULT_WHO;
     const statements = [
         tellGWT(entity.context, STATEMENT_TYPE.GIVEN),
-        tellGWT(entity.when, STATEMENT_TYPE.WHEN),
-        tellGWT(entity.then, STATEMENT_TYPE.THEN, actName),
+        tellGWT(entity.action, STATEMENT_TYPE.WHEN),
+        tellGWT(entity.outcome, STATEMENT_TYPE.THEN, actName),
     ]
 
     const collectedStatements = statements.filter(statement => statement).join(", ").trim();

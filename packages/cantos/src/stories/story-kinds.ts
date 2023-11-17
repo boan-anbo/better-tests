@@ -5,7 +5,6 @@
  * Types for Act kinds.
  */
 export enum GenreEntity {
-    ACT = "ACT",
     ENTITY = "ENTITY",
     BEHAVIOR = "BEHAVIOR",
     DOMAIN = "DOMAIN",
@@ -20,6 +19,25 @@ export enum GenreGherkin {
     THEN = "THEN",
 }
 
+/**
+ *
+ */
+export enum GenreSpec {
+    RULE = "RULE",
+    ACCEPTANCE_CRITERIA  = "ACCEPTANCE_CRITERIA",
+    REQUIREMENT = "REQUIREMENT",
+}
+
+export enum GenreActivities {
+    /**
+     * A mapping workshop is a workshop where the participants map out the domain with `rules` and `examples`
+     */
+    EXAMPLE_MAPPING = "EXAMPLE_MAPPING",
+    EVENT_STORMING = "EVENT_STORMING",
+    DOMAIN_STORYTELLING = "DOMAIN_STORYTELLING",
+    DOMAIN_MODELING = "DOMAIN_MODELING",
+}
+
 export enum GenreUserStory {
     EPIC = "EPIC",
     STORY = "STORY",
@@ -30,12 +48,14 @@ export enum GenreUserStory {
     SO_THAT = "SO THAT",
 }
 
-export type GenreBDD = GenreGherkin | GenreUserStory;
+export type GenreBDD = GenreGherkin | GenreUserStory | GenreSpec | GenreActivities;
 
-export const Genres = {
+export const StoryTypes = {
     ...GenreEntity,
     ...GenreGherkin,
     ...GenreUserStory,
+    ...GenreSpec,
+    ...GenreActivities,
 }
 
-export type Genres = GenreEntity | GenreBDD;
+export type StoryType = GenreEntity | GenreBDD;

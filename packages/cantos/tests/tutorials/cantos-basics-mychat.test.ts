@@ -136,7 +136,7 @@ const myChatStory = {
                             }
                     },
                     // When something happens:
-                    when: {
+                    action: {
                         userSendsAMessage:
                             {
                                 who: ["User"],
@@ -144,7 +144,7 @@ const myChatStory = {
                             },
                     },
                     // Then something else should/can/will happen:
-                    then: {
+                    outcome: {
                         appWrapsMessage:
                             {
                                 who: ["App", "AI"],
