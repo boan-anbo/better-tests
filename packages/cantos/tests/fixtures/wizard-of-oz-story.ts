@@ -39,7 +39,7 @@ const dorothyMeetsTheScarecrow = {
                 }
             }
             ,
-            when: {
+            action: {
 
                 arrivesAtACrossRoad:
                     {
@@ -47,7 +47,7 @@ const dorothyMeetsTheScarecrow = {
                         story: "arrives at a crossroad",
                     }
             },
-            then: {
+            outcome: {
 
                 wasConfused:
                     {
@@ -68,14 +68,14 @@ const dorothyMeetsTheScarecrow = {
                     }
             }
             ,
-            when: {
+            action: {
                 scareCrowToldDorothy:
                     {
                         who: ["Scarecrow"],
                         story: "told Dorothy which way to go",
                     }
             },
-            then: {
+            outcome: {
 
                 dorothyWasHappy:
                     {
@@ -102,14 +102,14 @@ const dorothyMeetsTheLion = {
                 }
             }
             ,
-            when: {
+            action: {
                 theyHearsARoar: {
                     who: ["Dorothy", "Scarecrow", "TinMan"],
                     story: "hear a roar",
                 }
             }
             ,
-            then: {
+            outcome: {
                 theyAreAfraid: {
                     who: ["Dorothy", "Scarecrow", "TinMan"],
                     story: "are afraid",
@@ -145,6 +145,4 @@ const dorothyMeetsHerCompanions = {
 
 
 export const wizardOfOzStory = loadScript(dorothyMeetsHerCompanions)
-
-
 

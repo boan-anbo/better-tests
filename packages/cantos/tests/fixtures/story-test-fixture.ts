@@ -1,5 +1,6 @@
 import {loadScript} from "@src/entrance.ts";
 
+
 export const StoryTestFixture = loadScript({
     story: "Story Test Fixture",
     scenes: {
@@ -21,12 +22,12 @@ export const StoryTestFixture = loadScript({
                     story: "a given is provided"
                 }
             },
-            when: {
+            action: {
                 askedToDescribeItselfFully: {
                     story: "asked to describe itself fully"
                 }
             },
-            then: {
+            outcome: {
                 shouldDescribeItself: {
                     story: "should describe itself fully"
                 }

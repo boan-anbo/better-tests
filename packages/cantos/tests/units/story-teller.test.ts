@@ -27,7 +27,7 @@ const storyTellerStoryWho = {
     scenes: {
         tellWhoStory: {
             who: ["Who"],
-            when: {
+            action: {
                 tellCalled: {
                     story: "tell() is called",
                 }
@@ -57,7 +57,7 @@ const storyTellerStoryTags = {
             who: ["User"],
             story: "can specify tags to print at the beginning of the story",
             explain: "For example, when the user specified \"Genre\", the printed story, no matter long or short, will have [GenreName] in front of it",
-            genre: GenreUserStory.FEATURE,
+            type: GenreUserStory.FEATURE,
             options: {
                 teller: {
                     tags: [StoryTag.Genre, StoryTag.Priority]

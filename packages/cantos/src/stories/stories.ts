@@ -3,7 +3,6 @@ import {STORY_DEFAULTS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
 import {CastProfiles, EmptyCast, IStory, IStoryScript, Test, Who} from "@src/stories/interfaces.ts";
-import {Genres} from "@src/stories/story-kinds.ts";
 import {getPath, populateActPath} from "@src/stories/utils.ts";
 import {TestKind} from "@src/stories/test-kinds.ts";
 import {printTag, printTestTags, printWho, tellStory} from "@src/stories/storyteller.ts";
@@ -11,40 +10,47 @@ import {IStoryScripts} from "@src/stories/story-types.ts";
 import {NameList} from "@src/util-types.ts";
 import {StoryOptions, StoryVersion} from "@src/stories/story-options.ts";
 import {StoryStatus} from "@src/stories/status.ts";
+import {StoryType, StoryTypes} from "@src/stories/story-kinds.ts";
 
 
 class StoryScript implements IStoryScript {
     story: string = STORY_DEFAULTS.DEFAULT_NARRATIVE;
     parentPath?: string | undefined;
-    genre?: Genres = Genres.ACT;
+    type?: StoryType = StoryTypes.STORY;
     implemented?: boolean = false;
     protagonist?: string = "it";
     explain?: string;
     options?: StoryOptions;
+
 
     constructor(
         entity: Partial<IStoryScript>,
         opt?: StoryOptions,
     ) {
         if (opt?.defaultKind) {
-            this.genre = opt.defaultKind;
+            this.type = opt.defaultKind;
         }
         Object.assign(this, entity);
-
-
     }
 }
 
+export interface Rule {
+    rule: string;
+    examples: string[];
+}
 
 export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StoryScript implements IStory<CAST> {
     who?: Who<CAST>[];
     options?: StoryOptions;
     scenes: Scenes<CAST> = {};
     context?: Scenes<CAST>
-    when?: Scenes<CAST>;
-    then?: Scenes<CAST>;
+
+    type?: StoryType = StoryTypes.STORY;
+    action?: Scenes<CAST>;
+    outcome?: Scenes<CAST>;
     status?: StoryStatus | string;
     priority?: number;
+
 
     cast?: CAST;
     path = () => getPath(this.story, this.parentPath)
@@ -136,18 +142,8 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
  *
  * @remarks
  * Represents an enhanced version of an `IActRecord` with additional methods from the `Act` class.
- * This type recursively applies itself to each nested act within the `acts` property, ensuring that
+ * This type recursively applies itself to each nested act within the `stories` property, ensuring that
  * each nested act also receives the benefit of intellisense.
- *
- * The `acts` property is a mapped type that iterates over each key in the original `acts` property
- * of the provided `IActRecord`. For each key, it checks if the corresponding value extends `IActRecord`.
- * If it does, the type is recursively applied to this value, enhancing it with `Act` methods.
- * If it does not extend `IActRecord`, the type for that key is set to `never`, indicating an invalid type.
- *
- * This approach allows the `UserAct` type to maintain the original structure of the `IActRecord`,
- * including any nested acts, while also adding the methods and properties defined in the `Act` class.
- * As a result, instances of `ActWithMethods` have both the data structure defined by their specific `IActRecord`
- * implementation and the functionality provided by `Act`.
  *
  * @template T - A type extending `IActRecord` that represents the structure of the act record.
  *              This generic type allows `ActWithMethods` to be applied to any specific implementation
@@ -155,6 +151,13 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
  */
 export type UserStory<T extends IStoryScript<CAST>, CAST extends CastProfiles> = ReadonlyDeep<T> & Story<CAST> & {
     scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['scenes'][K], CAST>> : never };
+    examples: { [K in keyof T['examples']]: T['examples'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['examples'][K], CAST>> : never };
+    rules: { [K in keyof T['rules']]: T['rules'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['rules'][K], CAST>> : never };
+    questions: { [K in keyof T['questions']]: T['questions'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['questions'][K], CAST>> : never };
+    context: { [K in keyof T['context']]: T['context'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['context'][K], CAST>> : never };
+    action: { [K in keyof T['action']]: T['action'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['action'][K], CAST>> : never };
+    outcome: { [K in keyof T['outcome']]: T['outcome'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['outcome'][K], CAST>> : never };
+    so: { [K in keyof T['so']]: T['so'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['so'][K], CAST>> : never };
 };
 
 export type UserCast<CAST extends CastProfiles> = ReadonlyDeep<CAST>;

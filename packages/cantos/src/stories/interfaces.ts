@@ -1,11 +1,11 @@
 import {Story, TestKind} from "@src/stories/stories.ts";
-import {Genres} from "@src/stories/story-kinds.ts";
+import type {StoryType} from "@src/stories/story-kinds.ts";
 import {Scenes} from "@src/entrance.ts";
 import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryStatus} from "@src/stories/status.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
-export interface Test<CAST extends CastProfiles=typeof EmptyCast> {
+export interface Test<CAST extends CastProfiles = typeof EmptyCast> {
     /**
      * The type of tests.
      */
@@ -52,7 +52,49 @@ export type CastProfiles = Record<string, StoryActor>;
  */
 export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
     /**
-     * The optional protagonists of the story.
+     * Text of the story
+     *
+     * @remarks
+     * What "who" do(es).
+     */
+    story: string;
+    scenes?: IStoryScripts<Cast>;
+    /**
+     * The order of the story among its sibling stories.
+     */
+    order?: number;
+    cast?: Cast;
+    /**
+     * Story-by-Story options that can override the global story options.
+     */
+    options?: StoryOptions;
+    type?: StoryType;
+    tests?: Record<string, Test>
+    parentPath?: string;
+    explain?: string;
+    /**
+     * The condition when the story is considered done.
+     */
+    done?: string;
+    /**
+     * The current status of the story
+     */
+    status?: StoryStatus | string;
+    lastUpdate?: string;
+
+    priority?: number;
+
+    /**
+     * A requirement, acceptance criterion, or a rule that the story, and its examples, must satisfy.
+     */
+    rules?: IStoryScripts<Cast>;
+    examples?: IStoryScripts<Cast>;
+    // Remaining questions
+    questions?: IStoryScripts<Cast>;
+
+
+    /**
+     * The actors of the story.
      *
      * @remark
      * It defaults to inherited who, and if it has not inherited any "who", it will default to "it".
@@ -103,45 +145,20 @@ export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
      */
     who?: Who<Cast>[];
     /**
-     * Text of the story
-     *
-     * @remarks
-     * What "who" do(es).
+     * The context of the story.
      */
-    story: string;
-    scenes?: IStoryScripts<Cast>;
-    /**
-     * The order of the story among its sibling stories.
-     */
-    order?: number;
-    cast?: Cast;
-    /**
-     * Story-by-Story options that can override the global story options.
-     */
-    options?: StoryOptions;
-    genre?: Genres;
-    tests?: Record<string, Test>
-    parentPath?: string;
-    explain?: string;
-    /**
-     * The condition when the story is considered done.
-     */
-    done?: string;
-    /**
-     * The current status of the story
-     */
-    status?: StoryStatus | string;
-    lastUpdate?: string;
-
-    priority?: number;
-
-
     context?: IStoryScripts<Cast>;
-
-    when?: IStoryScripts<Cast>;
-
-    then?: IStoryScripts<Cast>;
-
+    /**
+     * The action of the story.
+     */
+    action?: IStoryScripts<Cast>;
+    /**
+     * The outcome of the story.
+     */
+    outcome?: IStoryScripts<Cast>;
+    /**
+     * The consequence of the story.
+     */
     so?: IStoryScripts<Cast>;
 
     tellAs?: (fn: (entity: Story<Cast>) => string) => string;

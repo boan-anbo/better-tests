@@ -1,4 +1,4 @@
-import {Genres} from "@src/stories/story-kinds.ts";
+import {StoryType} from "@src/stories/story-kinds.ts";
 
 export enum StoryVersion {
     NO_PREFERENCE = "NO_PREFERENCE",
@@ -21,7 +21,7 @@ export interface StoryTellingOptions {
 }
 
 export interface StoryOptions {
-    defaultKind?: Genres
+    defaultKind?: StoryType
     capitalizeKeywords?: boolean
     teller?: StoryTellingOptions
 }
