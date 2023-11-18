@@ -1,34 +1,101 @@
-import {loadCast, loadScript, StoryScript} from "@src/index.ts";
-import {CastProfiles} from "@src/stories/interfaces.ts";
+import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
+import {StoryScript} from "@src/stories/story-types.ts";
+import { loadScript} from "@src/entrance.ts";
+
+const dorothyObjects = {
+    entities: {
+        Dorothy: {
+            id: "Dorothy",
+        },
+    },
+    values: {
+        hasBrain: true
+    }
+} satisfies DomainObjectDef;
 
 
-const wizardOfOzCastProfiles = {
-    Dorothy: {
-        role: "Dorothy Gale",
-        roleBio: "A young girl from Kansas who is carried away to the magical Land of Oz in a tornado and embarks on a quest with her new friends to see the Wizard who can help her return home.",
-        actor: "Judy Garland",
+const scareCrowObjects = {
+    entities: {
+        Scarecrow: {
+            id: "ScarecrowId",
+        },
 
     },
-    Scarecrow: {
-        role: "Scarecrow",
-        actor: "Ray Bolger",
-    },
-    TinMan: {
-        role: "Tin Woodman",
-        actor: "Jack Haley",
-    },
-    Lion: {
-        role: "Cowardly Lion",
-        actor: "Bert Lahr",
-    },
-} satisfies CastProfiles;
+    values: {
+        hasBrain: false
+    }
+} satisfies DomainObjectDef;
 
-const wizardOfOzCast = loadCast(wizardOfOzCastProfiles);
+const scarecrowDomain: Domain<typeof scareCrowObjects> = {
+    objects: scareCrowObjects,
+    aggregates: {
+        scareCrowTheCharacter: {
+            root: "Scarecrow",
+            actorName: "Ray Bolger"
+        }
+    },
+    events: {
+        sawDorothy: {
+            name: "sawDorothy"
+        }
+    }
+} satisfies Domain<typeof scareCrowObjects>
 
+const tinManObjects = {
+    entities: {
+        TinMan: {
+            id: "TinManId",
+        },
+
+    },
+    values: {
+        hasHeart: false
+    }
+} satisfies DomainObjectDef;
+
+const tinManDomain: Domain<typeof tinManObjects> = {
+    objects: tinManObjects,
+    aggregates: {
+        tinManTheCharacter: {
+            root: "TinMan",
+            actorName: "Jack Haley"
+        }
+    },
+    events: {
+        sawDorothy: {
+            name: "sawDorothy"
+        }
+    }
+} satisfies Domain<typeof tinManObjects>
+
+
+
+
+
+
+const ozDomain = {
+    subdomains: {
+        scarecrowDomain,
+        tinManDomain,
+    },
+    objects: dorothyObjects,
+    aggregates: {
+        dorothyTheCharacter: {
+            root: "Dorothy",
+            actorName: "Judy Garland"
+        }
+    },
+    events: {
+        thrownByHurricane: {
+            name: "thrownByHurricane"
+        }
+    }
+
+} satisfies Domain<typeof dorothyObjects>
 
 const dorothyMeetsTheScarecrow = {
     story: "When Dorothy meets the Scarecrow",
-    cast: wizardOfOzCast,
+    domains: ozDomain,
     scenes: {
         DOROTHY_LOST_HER_WAY: {
             story: "Dorothy lost her way",
@@ -87,11 +154,11 @@ const dorothyMeetsTheScarecrow = {
             order: 2,
         },
     }
-} satisfies StoryScript<typeof wizardOfOzCast>;
+} satisfies StoryScript<typeof  ozDomain>;
 
 const dorothyMeetsTheLion = {
     story: "When Dorothy meets the Lion",
-    cast: wizardOfOzCast,
+    domains: ozDomain,
     scenes: {
         THREE_IN_THE_FOREST: {
             story: "The three were walking in the forest",
@@ -119,24 +186,24 @@ const dorothyMeetsTheLion = {
             order: 1,
         },
     }
-} satisfies StoryScript<typeof wizardOfOzCast>;
+} satisfies StoryScript<typeof ozDomain>;
 
 const dorothyMeetsScarecrowAndLion = {
     story: "When Dorothy meets the Scarecrow and the Lion",
-    cast: wizardOfOzCast,
+    domains: ozDomain,
     scenes: {
         dorothyMeetsTheScarecrow,
         dorothyMeetsTheLion,
     }
-} satisfies StoryScript<typeof wizardOfOzCast>;
+} satisfies StoryScript<typeof ozDomain>;
 
 const dorothyMeetsHerCompanions = {
     story: "Dorothy meets her companions",
-    cast: wizardOfOzCast,
+    domains: ozDomain,
     scenes: {
         dorothyMeetsScarecrowAndLion,
     }
-} satisfies StoryScript<typeof wizardOfOzCast>;
+} satisfies StoryScript<typeof ozDomain>;
 
 
 /**

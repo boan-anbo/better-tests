@@ -38,6 +38,22 @@ export enum GenreActivities {
     DOMAIN_MODELING = "DOMAIN_MODELING",
 }
 
+export enum GenreRuleType {
+    /**
+     * Rules that always apply
+     */
+    INVARIANT = "INVARIANT",
+    /**
+     * Rules that prevents the `command` to trigger at all if not satisfied
+     */
+    PRECONDITION = "PRECONDITION",
+
+    /**
+     * Rules that prevents the `event` to be triggered by command if not satisfied
+     */
+    POSTCONDITION = "POSTCONDITION",
+}
+
 export enum GenreUserStory {
     EPIC = "EPIC",
     STORY = "STORY",
@@ -48,7 +64,7 @@ export enum GenreUserStory {
     SO_THAT = "SO THAT",
 }
 
-export type GenreBDD = GenreGherkin | GenreUserStory | GenreSpec | GenreActivities;
+export type GenreBDD = GenreGherkin | GenreUserStory | GenreSpec | GenreActivities | GenreRuleType;
 
 export const StoryTypes = {
     ...GenreEntity,

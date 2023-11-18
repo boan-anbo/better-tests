@@ -2,7 +2,7 @@ import {Scenes} from "@src/index.ts";
 import {GWT_DESCRIPTIONS, STORY_DEFAULTS, STORY_TELLER} from "@src/consts.ts";
 import {Story} from "@src/stories/stories.ts";
 import {StoryOptions, StoryTag, StoryVersion} from "@src/stories/story-options.ts";
-import {EmptyCast, Test, Who} from "@src/stories/interfaces.ts";
+import {EmptyRecord, Test, Who} from "@src/stories/interfaces.ts";
 
 enum STATEMENT_TYPE {
     GIVEN,
@@ -21,7 +21,7 @@ export const printTestTags = (tests: Test[]) => {
 
 export const printStory = (who: string, story: string) => joinByStoryTellerSpace([who, story]);
 
-export const joinByStoryTellerSpace = (texts: string[]) => texts.join(STORY_TELLER.SPACE);
+export const joinByStoryTellerSpace = (texts: string[]) => texts.join(STORY_TELLER.SPACE).trim();
 
 export const printWho = (who: Who<any>[] | undefined) => who ? who.join(STORY_TELLER.SPACE) : STORY_DEFAULTS.DEFAULT_WHO
 
@@ -55,7 +55,11 @@ function gatherTags(story: Story, tags: StoryTag[]): string {
 }
 
 const tellShortStory = (story: Story<any>): string => {
-    const who = printWho(story.who);
+    let who = '';
+    if (story.hasLongStory() || story.hasWho()) {
+
+        who = printWho(story.who);
+    }
     const storyText = story.story;
     return printStory(who, storyText);
 }
@@ -87,7 +91,7 @@ export function tellStory(story: Story<any>, version: StoryVersion): string {
 
 }
 
-export function tellGWT(acts: Scenes<typeof EmptyCast> | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
+export function tellGWT(acts: Scenes<typeof EmptyRecord> | undefined, prefixType: STATEMENT_TYPE, actName?: string): string | undefined {
 
     const actsLength = acts ? Object.keys(acts).length : 0;
     if (!acts) {

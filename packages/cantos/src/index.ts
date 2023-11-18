@@ -1,5 +1,6 @@
 import {UserStory} from "@src/stories/stories.ts";
-import {StoryScript, CastProfiles} from "@src/stories/story-types.ts";
+import {StoryScript} from "@src/stories/story-types.ts";
+import {UserDomain} from "@src/stories/interfaces.ts";
 
 
 // Re-export entrance methods
@@ -14,7 +15,7 @@ export {entrance as Cantos, entrance as C};
 
 
 // Export types for story
-export type { StoryScript, UserStory, CastProfiles}
+export type { StoryScript, UserStory, UserDomain}
 
 // export Common Test helpers
 export {CommonScences as CS, CommonTest as CT, CommonScences, CommonTest, customizeCommonTests}

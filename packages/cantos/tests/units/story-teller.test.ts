@@ -1,28 +1,44 @@
 import {beforeEach, describe, expect, it} from "vitest";
-import {loadCast, loadScript} from "@src/entrance.ts";
+import { loadScript} from "@src/entrance.ts";
 import {StoryScript} from "@src/stories/story-types.ts";
 import {GenreUserStory} from "@src/stories/story-kinds.ts";
 import {StoryTag} from "@src/stories/story-options.ts";
 import {TestKinds} from "@src/stories/test-kinds.ts";
-import {CastProfiles, CommonScences, CommonTest} from "@src/index";
+import { CommonScences, CommonTest} from "@src/index";
+import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
 
-const storyTellCastProfiles = {
-    Tag: {
-        role: "Tag",
-    },
-    Who: {
-        role: "Who",
-    },
-    User: {
-        role: "User",
-    },
-} satisfies CastProfiles
+const storyTellDomainObjects = {
+    entities: {
+        Tag: {
+            id: "Tag",
+        },
+        Who: {
+            id: "Who",
+        },
+        User: {
+            id: "User",
+        },
+    }
+} satisfies DomainObjectDef
 
-const storyTellerCast = loadCast(storyTellCastProfiles);
+const storyTellerDomain = {
+    objects: storyTellDomainObjects,
+    aggregates: {
+        Tag: {
+            root: "Tag"
+        },
+        Who: {
+            root: "Who"
+        },
+        User: {
+            root: "User"
+        }
+    }
+} satisfies Domain<typeof storyTellDomainObjects>
 
 const storyTellerStoryWho = {
     who: ["Who"],
-    cast: storyTellerCast,
+    domains: storyTellerDomain,
     story: CommonScences.SHOULD_WORK.story,
     scenes: {
         tellWhoStory: {
@@ -48,7 +64,7 @@ const storyTellerStoryWho = {
             }
         }
     }
-} satisfies StoryScript<typeof storyTellerCast>
+} satisfies StoryScript<typeof storyTellerDomain>
 
 const storyTellerStoryTags = {
     story: "Story Tags",
@@ -77,16 +93,16 @@ const storyTellerStoryTags = {
             },
         }
     }
-} satisfies StoryScript<typeof storyTellerCast>
+} satisfies StoryScript<typeof storyTellerDomain>
 
 const storyTellerScript = {
     story: "Story Teller",
-    cast: storyTellerCast,
+    domains: storyTellerDomain,
     scenes: {
         who: storyTellerStoryWho,
         tags: storyTellerStoryTags,
     }
-} satisfies StoryScript<typeof storyTellerCast>
+} satisfies StoryScript<typeof storyTellerDomain>
 
 const storyTellerStory = loadScript(storyTellerScript);
 

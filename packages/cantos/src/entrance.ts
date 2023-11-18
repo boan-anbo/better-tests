@@ -1,13 +1,15 @@
 // Utility function to map descriptions to act records
 // Utility function to map descriptions to act records
 import {NameList} from "@src/util-types.ts";
-import {Story,  UserNameList, UserStories, UserStory} from "@src/stories/stories.ts";
+import {Story, UserNameList, UserStories, UserStory} from "@src/stories/stories.ts";
 
-import {CastProfiles, IStory, IStoryScript} from "@src/stories/interfaces.ts";
+import {Domain, IStory, IStoryScript, UserDomain} from "@src/stories/interfaces.ts";
 import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
-type StoryField = { story: string }
+type StoryField = {
+    story: string
+}
 
 function mapNameList<T extends NameList>(tell: T): Record<keyof T, StoryField> {
     return Object.keys(tell).reduce((acc, key) => {
@@ -16,9 +18,13 @@ function mapNameList<T extends NameList>(tell: T): Record<keyof T, StoryField> {
     }, {} as Record<keyof T, StoryField>);
 }
 
-export function loadList<T extends NameList, CAST extends CastProfiles>(descriptions: T): UserNameList<T, CAST> {
+export function loadList<T extends NameList, DOMAINS extends Domain>(descriptions: T): UserNameList<T, DOMAINS> {
     const result = mapNameList(descriptions);
-    return loadScriptRecord(result) as UserNameList<T, CAST>;
+    return loadScriptRecord(result) as unknown as UserNameList<T, DOMAINS>;
+}
+
+export function loadDomain<T extends Domain>(domain: T): UserDomain<T> {
+    return domain
 }
 
 /**
@@ -27,32 +33,28 @@ export function loadList<T extends NameList, CAST extends CastProfiles>(descript
  * @param opt - Optional parameters.
  * @returns A ReadonlyDeep Act.
  */
-export function loadScript<SCRIPT extends IStoryScript<CAST>, CAST extends CastProfiles>(partialEntity: SCRIPT, opt?: StoryOptions): UserStory<SCRIPT, CAST> {
-    const newAct = new Story(partialEntity, opt) as Story<CAST>
-    for (const actKey in newAct.scenes) {
-        newAct.scenes[actKey] = instantiateStoriesRecursively(newAct.scenes[actKey]);
+export function loadScript<SCRIPT extends IStoryScript<DOMAINS>, DOMAINS extends Domain>(partialEntity: SCRIPT, opt?: StoryOptions): UserStory<SCRIPT, DOMAINS> {
+    const newStory = new Story(partialEntity, opt) as Story<DOMAINS>
+    for (const actKey in newStory.scenes) {
+        newStory.scenes[actKey] = instantiateStoriesRecursively(newStory.scenes[actKey]);
     }
-    return newAct as UserStory<SCRIPT, CAST>;
+    return newStory as UserStory<SCRIPT, DOMAINS>;
 }
 
-export function loadCast<CAST extends CastProfiles>(cast: CAST): CAST {
-    return cast
-}
-
-export function loadScriptRecord<SCRIPTS extends IStoryScripts<CAST>, CAST extends CastProfiles>(actRecords: SCRIPTS): UserStories<SCRIPTS, CAST> {
-    const acts = {} as any;
+export function loadScriptRecord<SCRIPTS extends IStoryScripts<DOMAINS>, DOMAINS extends Domain>(actRecords: SCRIPTS): UserStories<SCRIPTS, DOMAINS> {
+    const stories = {} as any;
 
     Object.keys(actRecords).forEach((actKey) => {
-        const story: IStoryScript<CAST> = actRecords[actKey as keyof SCRIPTS] as IStoryScript<CAST>;
-        acts[actKey as keyof SCRIPTS] = loadScript<typeof story, CAST>(story);
+        const story: IStoryScript<DOMAINS> = actRecords[actKey as keyof SCRIPTS] as IStoryScript<DOMAINS>;
+        stories[actKey as keyof SCRIPTS] = loadScript<typeof story, DOMAINS>(story);
     });
-    return acts as UserStories<SCRIPTS, CAST>;
+    return stories as UserStories<SCRIPTS, DOMAINS>;
 }
 
-function instantiateStoriesRecursively<T extends Story<CAST>, CAST extends CastProfiles>(partialAct: IStory<CAST>): T {
-    const act = new Story(partialAct) as Story<CAST>;
+function instantiateStoriesRecursively<T extends Story<DOMAIN>, DOMAIN extends Domain>(partialAct: IStory<DOMAIN>): T {
+    const act = new Story(partialAct) as Story<DOMAIN>;
     for (const actKey in act.scenes) {
-        act.scenes[actKey] = instantiateStoriesRecursively(act.scenes[actKey] as unknown as Story<CAST>);
+        act.scenes[actKey] = instantiateStoriesRecursively(act.scenes[actKey] as unknown as Story<DOMAIN>);
     }
     return act as T;
 }
@@ -60,5 +62,5 @@ function instantiateStoriesRecursively<T extends Story<CAST>, CAST extends CastP
 /**
  * Types for Records.
  */
-export type Scenes<CAST extends CastProfiles> = Record<string, IStory<CAST>>;
+export type Scenes<DOMAIN extends Domain> = Record<string, IStory<DOMAIN>>;
 // Export entrance methods
