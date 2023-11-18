@@ -7,8 +7,9 @@
  *
  * @see https://github.com/boan-anbo/better-tests for more details.
  */
-import {CastProfiles, CommonScences, loadCast, loadScript, StoryScript} from "@src/index";
+import {CommonScences,  loadScript, StoryScript} from "@src/index";
 import {describe, expect, it} from "vitest";
+import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
 
 
 /**
@@ -25,31 +26,53 @@ import {describe, expect, it} from "vitest";
 // Imagine, if you will, you're the casting director of a movie, a movie of your APP.
 // Or, think of it as the opportunity to think through on the "entities" or the "ontology" of your APP: what exists out there.
 // If your APP is a planet, what are the species on it?
-const myChatCastProfiles = {
-    App: {
-        role: 'App',
-        roleBio: 'The chat app that connects the AI and the user',
-        actor: "MyChat App"
+const domainsObjects = {
+    entities: {
+        App: {
+            id: "App",
+        },
+        AI: {
+            id: "AI",
+        },
+        User: {
+            id: "User",
+        },
+        InternetConnection: {
+            id: "InternetConnection",
+        },
     },
-    AI: {
-        role: 'AI',
-        roleBio: 'The AI agent that powers the chat app',
-        actor: "OpenAI ChatGPT-4"
-    },
-    User: {
-        role: 'User',
-        roleBio: 'The user of the chat app who chats with the AI about anything',
-        actor: "You"
-    },
-    InternetConnection: {
-        role: 'Internet',
-        roleBio: 'The internet connection that connects the user and the AI which is only available on the cloud',
-        actor: "User's Internet Provider"
-    },
-} satisfies CastProfiles // <-- `satisfies` is a Typescript feature to let you have auto-complete when you write your stories with these cast members later.
+} satisfies DomainObjectDef // <-- `satisfies` is a Typescript feature to let you have auto-complete when you write your stories with these cast members later.
+
+const myChatCastDomain = {
+    objects: domainsObjects,
+    aggregates: {
+        app: {
+            root: "App",
+            roleBio: 'The chat app that connects the AI and the user',
+            actor: "MyChat App"
+        },
+        ai: {
+            root: "AI",
+            roleBio: 'The AI agent that powers the chat app',
+            actor: "OpenAI ChatGPT-4"
+        },
+        user: {
+            root: "User",
+            roleBio: 'The user of the chat app who chats with the AI about anything',
+            actor: "You"
+        },
+        internet: {
+            root: "InternetConnection",
+            roleBio: 'The internet connection that connects the user and the AI which is only available on the cloud',
+            actor: "User's Internet Provider"
+        },
+    }
+} satisfies Domain<typeof domainsObjects>
+
+
+
 
 // I.2. Load the `cast` profiles you prepared easily into Cantos.
-const myChatCast = loadCast(myChatCastProfiles)
 
 // II. Write the `stories` of your APP
 //
@@ -61,7 +84,7 @@ const myChatStory = {
     story: "The user uses MyChat to chat with the AI",
 
     // We also provide the `cast` profiles we prepared earlier.
-    cast: myChatCast, // <-- This let Cantos know which cast to use for your stories, so it can help you with auto-complete later.
+    domains: myChatCastDomain, // <-- This let Cantos know which cast to use for your stories, so it can help you with auto-complete later.
 
     // The scenes that make up the story/movie/feature.
     scenes: {
@@ -179,7 +202,7 @@ const myChatStory = {
             }
         }
     }
-} satisfies StoryScript<typeof myChatCast>
+} satisfies StoryScript<typeof myChatCastDomain>
 
 // II.2 Now let's load your story script into Cantos to turn it into a powerful and reusable tool.
 // The created story will provide intellisense, so you will know what scenes you have in your story as if you have a blueprint of your app in your hand when you test and implement your features one by one.

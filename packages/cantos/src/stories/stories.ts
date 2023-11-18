@@ -1,16 +1,23 @@
-import {PartialDeep, ReadonlyDeep} from "type-fest";
+import {PartialDeep} from "type-fest";
 import {STORY_DEFAULTS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
-import {CastProfiles, EmptyCast, IStory, IStoryScript, Test, Who} from "@src/stories/interfaces.ts";
+import {
+    Domain,
+    EmptyRecord,
+    IStory,
+    IStoryScript,
+    Test,
+    Who
+} from "@src/stories/interfaces.ts";
 import {getPath, populateActPath} from "@src/stories/utils.ts";
 import {TestKind} from "@src/stories/test-kinds.ts";
 import {printTag, printTestTags, printWho, tellStory} from "@src/stories/storyteller.ts";
-import {IStoryScripts} from "@src/stories/story-types.ts";
 import {NameList} from "@src/util-types.ts";
 import {StoryOptions, StoryVersion} from "@src/stories/story-options.ts";
-import {StoryStatus} from "@src/stories/status.ts";
 import {StoryType, StoryTypes} from "@src/stories/story-kinds.ts";
+import {StoryStatus} from "@src/stories/status.ts";
+import {IStoryScripts} from "@src/stories/story-types.ts";
 
 
 class StoryScript implements IStoryScript {
@@ -34,31 +41,27 @@ class StoryScript implements IStoryScript {
     }
 }
 
-export interface Rule {
-    rule: string;
-    examples: string[];
-}
 
-export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StoryScript implements IStory<CAST> {
-    who?: Who<CAST>[];
+
+export class Story<DOMAIN extends Domain = typeof EmptyRecord> extends StoryScript implements IStory<DOMAIN> {
+    action?: Scenes<DOMAIN>;
+    context?: Scenes<DOMAIN>;
+    outcome?: Scenes<DOMAIN>;
+    so?: Scenes<DOMAIN>;
+    who?: Who<DOMAIN>[];
     options?: StoryOptions;
-    scenes: Scenes<CAST> = {};
-    context?: Scenes<CAST>
-
-    type?: StoryType = StoryTypes.STORY;
-    action?: Scenes<CAST>;
-    outcome?: Scenes<CAST>;
-    status?: StoryStatus | string;
+    scenes: Scenes<DOMAIN> = {};
     priority?: number;
+    status?: StoryStatus | string;
 
 
-    cast?: CAST;
+    domains?: DOMAIN;
     path = () => getPath(this.story, this.parentPath)
     // get a getter to get test id
     testId = this.path;
-    tellAs: (fn: (entity: Story<CAST>) => string) => string;
+    tellAs: (fn: (entity: Story<DOMAIN>) => string) => string;
 
-    nextActToDo(): Story<CAST> | undefined {
+    nextActToDo(): Story<DOMAIN> | undefined {
         return undefined
     }
 
@@ -96,21 +99,24 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
      * get the name of a cast member in the who
      * @param who
      */
-    nameOfWho = (who: Who<CAST>) => printWho([who]);
+    nameOfWho = (who: Who<DOMAIN>) => printWho([who]);
 
-    getCasts = () => this.cast;
+    getCasts = () => this.domains;
 
-    profileOfWho = (who: Who<CAST>) => {
-        if (this.cast) {
-            try {
+    // profileOfWho = (who: Who<CAST>) => {
+    //     if (this.cast) {
+    //         try {
+    //
+    //             return this.cast[who];
+    //         } catch (e) {
+    //             throw new Error(`Cast ${who} not found in ${this.cast}. Check if you had ${who} in the cast profiles.`)
+    //         }
+    //     }
+    //     throw new Error(`You did not provide a cast for this story.`)
+    // }
 
-                return this.cast[who];
-            } catch (e) {
-                throw new Error(`Cast ${who} not found in ${this.cast}. Check if you had ${who} in the cast profiles.`)
-            }
-        }
-        throw new Error(`You did not provide a cast for this story.`)
-    }
+    hasLongStory = () => [this.context, this.action, this.outcome, this.so].some(story => story);
+    hasWho = () => this.who && this.who.length > 0;
 
 
     constructor(
@@ -149,26 +155,23 @@ export class Story<CAST extends CastProfiles = typeof EmptyCast> extends StorySc
  *              This generic type allows `ActWithMethods` to be applied to any specific implementation
  *              of `IActRecord`, preserving its unique structure.
  */
-export type UserStory<T extends IStoryScript<CAST>, CAST extends CastProfiles> = ReadonlyDeep<T> & Story<CAST> & {
-    scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['scenes'][K], CAST>> : never };
-    examples: { [K in keyof T['examples']]: T['examples'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['examples'][K], CAST>> : never };
-    rules: { [K in keyof T['rules']]: T['rules'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['rules'][K], CAST>> : never };
-    questions: { [K in keyof T['questions']]: T['questions'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['questions'][K], CAST>> : never };
-    context: { [K in keyof T['context']]: T['context'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['context'][K], CAST>> : never };
-    action: { [K in keyof T['action']]: T['action'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['action'][K], CAST>> : never };
-    outcome: { [K in keyof T['outcome']]: T['outcome'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['outcome'][K], CAST>> : never };
-    so: { [K in keyof T['so']]: T['so'][K] extends IStoryScript<CAST> ? ReadonlyDeep<UserStory<T['so'][K], CAST>> : never };
+export type UserStory<T extends IStoryScript<DOMAINS>, DOMAINS extends Domain> = T & Story<DOMAINS> & {
+    scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<DOMAINS> ? UserStory<T['scenes'][K], DOMAINS> : never };
+    context: { [K in keyof T['context']]: T['context'][K] extends IStoryScript<DOMAINS> ? UserStory<T['context'][K], DOMAINS> : never };
+    action: { [K in keyof T['action']]: T['action'][K] extends IStoryScript<DOMAINS> ? UserStory<T['action'][K], DOMAINS> : never };
+    outcome: { [K in keyof T['outcome']]: T['outcome'][K] extends IStoryScript<DOMAINS> ? UserStory<T['outcome'][K], DOMAINS> : never };
+    so: { [K in keyof T['so']]: T['so'][K] extends IStoryScript<DOMAINS> ? UserStory<T['so'][K], DOMAINS> : never };
 };
 
-export type UserCast<CAST extends CastProfiles> = ReadonlyDeep<CAST>;
+export type UserCast<CAST extends Domain> = CAST;
 
-export type UserStories<T extends IStoryScripts<CAST>, CAST extends CastProfiles> = ReadonlyDeep<{ [K in keyof T]: ReadonlyDeep<UserStory<T[K], CAST>> }>;
+export type UserStories<T extends IStoryScripts<CAST>, CAST extends Domain> = { [K in keyof T]: UserStory<T[K], CAST> };
 
-export type UserNameList<T extends NameList, CAST extends CastProfiles> = ReadonlyDeep<{
-    [K in keyof T]: ReadonlyDeep<UserStory<{
-        story: T[K]
-    }, CAST>>
-}>;
+export type UserNameList<Record extends NameList, CAST extends Domain> = {
+    [EntryKey in keyof Record]: UserStory<{
+        story: Record[EntryKey]
+    }, CAST>
+};
 
 export {TestKind};
 

@@ -5,7 +5,7 @@ import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryStatus} from "@src/stories/status.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
-export interface Test<CAST extends CastProfiles = typeof EmptyCast> {
+export interface Test<DOMAIN extends Domain = typeof EmptyDomain> {
     /**
      * The type of tests.
      */
@@ -23,34 +23,103 @@ export interface Test<CAST extends CastProfiles = typeof EmptyCast> {
      * FIXME: Not extending the actual type. Perhaps need a factory function, something like createTest which takes in a createdStory for type inference.
      * The a function with passed in root story and the current story that has the test, which should return an any to be used as the parameter for expect.
      */
-    receivedAs?: (rootStory: Story<CAST>, currentStory: Story<CAST>) => any | Promise<any>;
+    receivedAs?: (rootStory: Story<DOMAIN>, currentStory: Story<DOMAIN>) => any | Promise<any>;
 
     /**
      * FIXME: Not extending the actual type.
      * The a function with passed in root story and the current story that has the test, which should return an any to be used as the parameter for expect.
      */
-    expectedAs?: (rootStory: Story<CAST>, currentStory: Story<CAST>) => any;
+    expectedAs?: (rootStory: Story<DOMAIN>, currentStory: Story<DOMAIN>) => any;
 
 }
 
-export interface StoryActor {
-    role?: string;
-    roleBio?: string;
-    /**
-     * The name of the role.
-     */
-    actor?: string;
-    actorBio?: string;
+
+export interface DomainEvent {
+    name: string;
 }
 
-export const EmptyCast = {} as const;
-export type Who<T> = T extends Record<string, any> ? keyof T : never;
-export type CastProfiles = Record<string, StoryActor>;
+export interface DomainCommand {
+    name: string;
+}
+
+export interface Aggregate<T extends DomainObjects> {
+    // root: keyof TObject['entities'];
+    root: T extends DomainObjects ? (T['entities'] extends Record<string, DomainEntity> ? keyof T['entities'] : string) : string;
+
+    [key: string]: any; // Allows arbitrary additional properties
+}
+
+export interface DomainEntity {
+    // Unique identity of an entity
+    id: string
+    // Description of the entity
+    bio?: string
+}
+
+export const DefaultEntities: Record<string, DomainEntity> = {};
+
+export interface DomainObjects<
+    TEntities extends Record<string, DomainEntity> = typeof DefaultEntities,
+    TValues extends Record<string, any> = typeof EmptyRecord
+> {
+    entities?: TEntities;
+    values?: Record<string, TValues>;
+}
+
+
+export interface Domain<
+    TOBjects extends DomainObjects = typeof EmptyRecord,
+    TEvents extends DomainEvent = DomainEvent,
+    TCommands extends DomainCommand = DomainCommand,
+> {
+    subdomains?: Record<string, Domain<any>>;
+    objects?: TOBjects;
+    aggregates?: Record<string, Aggregate<TOBjects>>;
+    events?: Record<string, TEvents>;
+    commands?: Record<string, TCommands>;
+}
+
+export type DomainObjectDef<T extends DomainObjects = DomainObjects> = T
+
+
+export type UserDomain<T extends Domain> = T & Domain;
+
+
+export interface RuleExamples {
+    rule: string;
+    examples: StringRecord
+}
+
+export const EmptyRecord = {} as const;
+export const EmptyDomain: Domain<any> = {} as const;
+// Dumb, or smart?, way to debug type inference: change never to a definite type, such as number, and see if `who` field inferre to that type, if it is, debug there, if not, move up the chain.
+// Simplified type to extract entity keys from a domain
+export type DomainEntityKeys<T extends Domain> = T['objects'] extends DomainObjects ? keyof T['objects']['entities'] : string;
+
+// Revised Who<T> type using the simplified utility type
+export type Who<T extends Domain> = {
+    [K in keyof T]: T[K] extends Domain<any>
+        ? DomainEntityKeys<T[K]>
+        : string;
+}[keyof T];
+
+export type StringRecord = Record<string, string>;
 
 /**
  * Bare Act is the base structure for any entity or behavior without methods or nested entities.
  */
-export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
+export interface IStoryScript<DOMAIN extends Domain = typeof EmptyRecord> {
+    /**
+     * The actors of the story.
+     *
+     * @remark
+     * It defaults to inherited who, and if it has not inherited any "who", it will default to "it".
+     *
+     * Use it to override when the story does not make sense with the current parent story.
+     *
+     * You usually can avoid overriding who by using active voice and assigning important roles as the subject.
+     */
+    who?: Who<DOMAIN>[];
     /**
      * Text of the story
      *
@@ -58,12 +127,12 @@ export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
      * What "who" do(es).
      */
     story: string;
-    scenes?: IStoryScripts<Cast>;
+    scenes?: IStoryScripts<DOMAIN>;
     /**
      * The order of the story among its sibling stories.
      */
     order?: number;
-    cast?: Cast;
+    domains?: DOMAIN;
     /**
      * Story-by-Story options that can override the global story options.
      */
@@ -86,89 +155,48 @@ export interface IStoryScript<Cast extends CastProfiles = typeof EmptyCast> {
 
     /**
      * A requirement, acceptance criterion, or a rule that the story, and its examples, must satisfy.
+     *
+     * @remarks
+     * For documenting workshop activity, therefore only contains string values.
+     * To formalize the rule, use {@link Story} under `scenes` instead.
      */
-    rules?: IStoryScripts<Cast>;
-    examples?: IStoryScripts<Cast>;
-    // Remaining questions
-    questions?: IStoryScripts<Cast>;
+    rules?: Record<string, RuleExamples>;
 
 
     /**
-     * The actors of the story.
-     *
-     * @remark
-     * It defaults to inherited who, and if it has not inherited any "who", it will default to "it".
-     *
-     * @example Override who for current story
-     * Use it to override when the story does not make sense with the current parent story.
-     * ```ts
-     * {
-     *     story: "MyApp",
-     *     cast: myAppCast,
-     *     who: ["MyApp"],
-     *     scenes: {
-     *         tellsWeather: {
-     *             story: "tells the weather", // this makes sense without overriding the parent story's "who",
-     *             context: {
-     *             // Suppose tellsWeather features has a requirement that the location service must be enabled.
-     *                 locationServiceEnabled: {
-     *                 // This story does NOT make sense with the parents who--"MyApp" as in "MyApp is enabled" which will be wrong.
-     *                     story: "isEnabled",
-     *                     // So we override it with "LocationService". Now it reads "LocationService is enabled".
-     *                     who: ["LocationService"],
-     *                     }
-     *                 }
-     *             }
-     *         }
-     *     }
-     *```
-     *
-     * @example Write stories in a way that needs no overriding `who`
-     * You usually can avoid overriding who by using active voice and assigning important roles as the subject.
-     * ```ts
-     * const myAppStory = {
-     *  story: "MyApp",
-     *  cast: myAppCast,
-     *  who: ["MyApp"],
-     *  scenes: {
-     *    tellsWeather: {
-     *    story: "tells the weather",
-     *    context: {
-     *     hasLocationServicePrivilege: {
-     *          story: "has location service privilege"
-     *     }
-     *     }
-     *     }
-     * }
-     *
-     * ```
+     * Any tricky issues that are current unsolved.
      */
-    who?: Who<Cast>[];
+    questions?: StringRecord;
+
+
     /**
      * The context of the story.
      */
-    context?: IStoryScripts<Cast>;
+    context?: IStoryScripts<DOMAIN>;
     /**
      * The action of the story.
      */
-    action?: IStoryScripts<Cast>;
+    action?: IStoryScripts<DOMAIN>;
     /**
      * The outcome of the story.
      */
-    outcome?: IStoryScripts<Cast>;
+    outcome?: IStoryScripts<DOMAIN>;
     /**
      * The consequence of the story.
      */
-    so?: IStoryScripts<Cast>;
+    so?: IStoryScripts<DOMAIN>;
 
-    tellAs?: (fn: (entity: Story<Cast>) => string) => string;
+    tellAs?: (fn: (entity: Story<DOMAIN>) => string) => string;
+
+    hasLongStory?: () => boolean;
+
 }
 
-export interface IStory<CAST extends CastProfiles> extends IStoryScript<CAST> {
-    scenes: Scenes<CAST>;
-    readonly testId: () => string;
+export interface IStory<DOMAIN extends Domain = typeof EmptyDomain> extends IStoryScript<DOMAIN> {
+    scenes: Scenes<DOMAIN>;
+    testId: () => string;
     path: () => string;
-    nextActToDo: () => Story<CAST> | undefined;
+    nextActToDo: () => Story<DOMAIN> | undefined;
 
     /**
      * Simply tell the story, using teller preference {@link StoryTellingOptions} to decide whether to tell the short or long version.
