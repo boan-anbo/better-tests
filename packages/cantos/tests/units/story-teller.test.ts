@@ -5,7 +5,7 @@ import {GenreUserStory} from "@src/stories/story-kinds.ts";
 import {StoryTag} from "@src/stories/story-options.ts";
 import {TestKinds} from "@src/stories/test-kinds.ts";
 import { CommonScences, CommonTest} from "@src/index";
-import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
+import {DomainDef, DomainObjectsDef} from "@src/stories/interfaces.ts";
 
 const storyTellDomainObjects = {
     entities: {
@@ -19,7 +19,7 @@ const storyTellDomainObjects = {
             id: "User",
         },
     }
-} satisfies DomainObjectDef
+} satisfies DomainObjectsDef
 
 const storyTellerDomain = {
     objects: storyTellDomainObjects,
@@ -34,11 +34,11 @@ const storyTellerDomain = {
             root: "User"
         }
     }
-} satisfies Domain<typeof storyTellDomainObjects>
+} satisfies DomainDef<typeof storyTellDomainObjects>
 
 const storyTellerStoryWho = {
     who: ["Who"],
-    domains: storyTellerDomain,
+    domain: storyTellerDomain,
     story: CommonScences.SHOULD_WORK.story,
     scenes: {
         tellWhoStory: {
@@ -97,7 +97,7 @@ const storyTellerStoryTags = {
 
 const storyTellerScript = {
     story: "Story Teller",
-    domains: storyTellerDomain,
+    domain: storyTellerDomain,
     scenes: {
         who: storyTellerStoryWho,
         tags: storyTellerStoryTags,

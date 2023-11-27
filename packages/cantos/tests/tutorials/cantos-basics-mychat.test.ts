@@ -9,7 +9,7 @@
  */
 import {CommonScences,  loadScript, StoryScript} from "@src/index";
 import {describe, expect, it} from "vitest";
-import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
+import {DomainDef, DomainObjectsDef} from "@src/stories/interfaces.ts";
 
 
 /**
@@ -41,7 +41,7 @@ const domainsObjects = {
             id: "InternetConnection",
         },
     },
-} satisfies DomainObjectDef // <-- `satisfies` is a Typescript feature to let you have auto-complete when you write your stories with these cast members later.
+} satisfies DomainObjectsDef // <-- `satisfies` is a Typescript feature to let you have auto-complete when you write your stories with these cast members later.
 
 const myChatCastDomain = {
     objects: domainsObjects,
@@ -67,7 +67,7 @@ const myChatCastDomain = {
             actor: "User's Internet Provider"
         },
     }
-} satisfies Domain<typeof domainsObjects>
+} satisfies DomainDef<typeof domainsObjects>
 
 
 
@@ -84,7 +84,7 @@ const myChatStory = {
     story: "The user uses MyChat to chat with the AI",
 
     // We also provide the `cast` profiles we prepared earlier.
-    domains: myChatCastDomain, // <-- This let Cantos know which cast to use for your stories, so it can help you with auto-complete later.
+    domain: myChatCastDomain, // <-- This let Cantos know which cast to use for your stories, so it can help you with auto-complete later.
 
     // The scenes that make up the story/movie/feature.
     scenes: {
