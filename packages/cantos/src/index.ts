@@ -4,6 +4,7 @@ import {DomainDef, DomainObjectsDef, UserDomain, DomainEntity, DomainEvent, Doma
 // import and export entrance as Acts or A
 import * as entrance from "./entrance.ts";
 import {CommonScences, CommonTest, customizeCommonTests} from "./commons.ts";
+import {TestKind} from "@src/stories/stories.ts";
 
 
 // Re-export entrance methods
@@ -19,4 +20,5 @@ export type {StoryScript, UserStory, DomainObjectsDef, DomainDef, UserDomain, Do
 // export Common Test helpers
 export {CommonScences as CS, CommonTest as CT, CommonScences, CommonTest, customizeCommonTests}
 
-// Export types for cast
+// export TestKind
+export {TestKind}
