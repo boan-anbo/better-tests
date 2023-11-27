@@ -1,19 +1,21 @@
 {
   "name": "better-tests",
   "version": "0.0.1",
-  "description": "A set of awesome, lightweight, and framework-agonistic tools to help you write better tests",
+  "description": "A set of awesome, lightweight, and framework-agnostic tools to help you write better tests",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/cantos",
+    "packages/mermaid-whisper"
   ],
   "scripts": {
     "test": "vitest",
     "build": "echo \"build is not configured for package \\\"×\\\", skipping\"",
-    "publish": "cd packages/cantos && npm publish --access public && cd ../.."
+    "publish:cantos": "cd packages/cantos && yarn prepublish && npm publish && cd ../.."
   },
   "author": "Bo An",
   "license": "ISC",
   "devDependencies": {
     "vitest": "^1.0.0-beta.4"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }

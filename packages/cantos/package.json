@@ -1,7 +1,7 @@
 {
   "name": "cantos",
   "author": "Bo An",
-  "version": "0.0.6",
+  "version": "0.0.14",
   "keywords": [
     "User Story",
     "TDD",
@@ -26,8 +26,8 @@
     "Svelte"
   ],
   "type": "module",
-  "main": "./dist/cantos.umd.cjs",
-  "module": "./dist/cantos.js",
+  "exports": "./dist/cantos.es.js",
+  "main": "./dist/cantos.esm.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -41,7 +41,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "mermaid": "^10.6.1",
-    "publish": "yarn build && npm publish"
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
