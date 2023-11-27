@@ -3,7 +3,7 @@ import {STORY_DEFAULTS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
 import {
-    Domain,
+    DomainDef,
     EmptyRecord,
     IStory,
     IStoryScript,
@@ -43,7 +43,7 @@ class StoryScript implements IStoryScript {
 
 
 
-export class Story<DOMAIN extends Domain = typeof EmptyRecord> extends StoryScript implements IStory<DOMAIN> {
+export class Story<DOMAIN extends DomainDef = typeof EmptyRecord> extends StoryScript implements IStory<DOMAIN> {
     action?: Scenes<DOMAIN>;
     context?: Scenes<DOMAIN>;
     outcome?: Scenes<DOMAIN>;
@@ -55,7 +55,7 @@ export class Story<DOMAIN extends Domain = typeof EmptyRecord> extends StoryScri
     status?: StoryStatus | string;
 
 
-    domains?: DOMAIN;
+    domain?: DOMAIN;
     path = () => getPath(this.story, this.parentPath)
     // get a getter to get test id
     testId = this.path;
@@ -101,7 +101,7 @@ export class Story<DOMAIN extends Domain = typeof EmptyRecord> extends StoryScri
      */
     nameOfWho = (who: Who<DOMAIN>) => printWho([who]);
 
-    getCasts = () => this.domains;
+    getCasts = () => this.domain;
 
     // profileOfWho = (who: Who<CAST>) => {
     //     if (this.cast) {
@@ -155,7 +155,7 @@ export class Story<DOMAIN extends Domain = typeof EmptyRecord> extends StoryScri
  *              This generic type allows `ActWithMethods` to be applied to any specific implementation
  *              of `IActRecord`, preserving its unique structure.
  */
-export type UserStory<T extends IStoryScript<DOMAINS>, DOMAINS extends Domain> = T & Story<DOMAINS> & {
+export type UserStory<T extends IStoryScript<DOMAINS>, DOMAINS extends DomainDef> = T & Story<DOMAINS> & {
     scenes: { [K in keyof T['scenes']]: T['scenes'][K] extends IStoryScript<DOMAINS> ? UserStory<T['scenes'][K], DOMAINS> : never };
     context: { [K in keyof T['context']]: T['context'][K] extends IStoryScript<DOMAINS> ? UserStory<T['context'][K], DOMAINS> : never };
     action: { [K in keyof T['action']]: T['action'][K] extends IStoryScript<DOMAINS> ? UserStory<T['action'][K], DOMAINS> : never };
@@ -163,11 +163,11 @@ export type UserStory<T extends IStoryScript<DOMAINS>, DOMAINS extends Domain> =
     so: { [K in keyof T['so']]: T['so'][K] extends IStoryScript<DOMAINS> ? UserStory<T['so'][K], DOMAINS> : never };
 };
 
-export type UserCast<CAST extends Domain> = CAST;
+export type UserCast<CAST extends DomainDef> = CAST;
 
-export type UserStories<T extends IStoryScripts<CAST>, CAST extends Domain> = { [K in keyof T]: UserStory<T[K], CAST> };
+export type UserStories<T extends IStoryScripts<CAST>, CAST extends DomainDef> = { [K in keyof T]: UserStory<T[K], CAST> };
 
-export type UserNameList<Record extends NameList, CAST extends Domain> = {
+export type UserNameList<Record extends NameList, CAST extends DomainDef> = {
     [EntryKey in keyof Record]: UserStory<{
         story: Record[EntryKey]
     }, CAST>
