@@ -3,7 +3,7 @@
 import {NameList} from "@src/util-types.ts";
 import {Story, UserNameList, UserStories, UserStory} from "@src/stories/stories.ts";
 
-import {Domain, IStory, IStoryScript, UserDomain} from "@src/stories/interfaces.ts";
+import {DomainDef, IStory, IStoryScript, UserDomain} from "@src/stories/interfaces.ts";
 import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
@@ -18,12 +18,12 @@ function mapNameList<T extends NameList>(tell: T): Record<keyof T, StoryField> {
     }, {} as Record<keyof T, StoryField>);
 }
 
-export function loadList<T extends NameList, DOMAINS extends Domain>(descriptions: T): UserNameList<T, DOMAINS> {
+export function loadList<T extends NameList, DOMAINS extends DomainDef>(descriptions: T): UserNameList<T, DOMAINS> {
     const result = mapNameList(descriptions);
     return loadScriptRecord(result) as unknown as UserNameList<T, DOMAINS>;
 }
 
-export function loadDomain<T extends Domain>(domain: T): UserDomain<T> {
+export function loadDomain<T extends DomainDef>(domain: T): UserDomain<T> {
     return domain
 }
 
@@ -33,7 +33,7 @@ export function loadDomain<T extends Domain>(domain: T): UserDomain<T> {
  * @param opt - Optional parameters.
  * @returns A ReadonlyDeep Act.
  */
-export function loadScript<SCRIPT extends IStoryScript<DOMAINS>, DOMAINS extends Domain>(partialEntity: SCRIPT, opt?: StoryOptions): UserStory<SCRIPT, DOMAINS> {
+export function loadScript<SCRIPT extends IStoryScript<DOMAINS>, DOMAINS extends DomainDef>(partialEntity: SCRIPT, opt?: StoryOptions): UserStory<SCRIPT, DOMAINS> {
     const newStory = new Story(partialEntity, opt) as Story<DOMAINS>
     for (const actKey in newStory.scenes) {
         newStory.scenes[actKey] = instantiateStoriesRecursively(newStory.scenes[actKey]);
@@ -41,7 +41,7 @@ export function loadScript<SCRIPT extends IStoryScript<DOMAINS>, DOMAINS extends
     return newStory as UserStory<SCRIPT, DOMAINS>;
 }
 
-export function loadScriptRecord<SCRIPTS extends IStoryScripts<DOMAINS>, DOMAINS extends Domain>(actRecords: SCRIPTS): UserStories<SCRIPTS, DOMAINS> {
+export function loadScriptRecord<SCRIPTS extends IStoryScripts<DOMAINS>, DOMAINS extends DomainDef>(actRecords: SCRIPTS): UserStories<SCRIPTS, DOMAINS> {
     const stories = {} as any;
 
     Object.keys(actRecords).forEach((actKey) => {
@@ -51,7 +51,7 @@ export function loadScriptRecord<SCRIPTS extends IStoryScripts<DOMAINS>, DOMAINS
     return stories as UserStories<SCRIPTS, DOMAINS>;
 }
 
-function instantiateStoriesRecursively<T extends Story<DOMAIN>, DOMAIN extends Domain>(partialAct: IStory<DOMAIN>): T {
+function instantiateStoriesRecursively<T extends Story<DOMAIN>, DOMAIN extends DomainDef>(partialAct: IStory<DOMAIN>): T {
     const act = new Story(partialAct) as Story<DOMAIN>;
     for (const actKey in act.scenes) {
         act.scenes[actKey] = instantiateStoriesRecursively(act.scenes[actKey] as unknown as Story<DOMAIN>);
@@ -62,5 +62,5 @@ function instantiateStoriesRecursively<T extends Story<DOMAIN>, DOMAIN extends D
 /**
  * Types for Records.
  */
-export type Scenes<DOMAIN extends Domain> = Record<string, IStory<DOMAIN>>;
+export type Scenes<DOMAIN extends DomainDef> = Record<string, IStory<DOMAIN>>;
 // Export entrance methods

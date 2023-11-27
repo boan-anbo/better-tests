@@ -1,4 +1,4 @@
-import {Domain, DomainObjectDef} from "@src/stories/interfaces.ts";
+import {DomainDef, DomainObjectsDef} from "@src/stories/interfaces.ts";
 import {StoryScript} from "@src/stories/story-types.ts";
 import { loadScript} from "@src/entrance.ts";
 
@@ -11,7 +11,7 @@ const dorothyObjects = {
     values: {
         hasBrain: true
     }
-} satisfies DomainObjectDef;
+} satisfies DomainObjectsDef;
 
 
 const scareCrowObjects = {
@@ -24,9 +24,9 @@ const scareCrowObjects = {
     values: {
         hasBrain: false
     }
-} satisfies DomainObjectDef;
+} satisfies DomainObjectsDef;
 
-const scarecrowDomain: Domain<typeof scareCrowObjects> = {
+const scarecrowDomain = {
     objects: scareCrowObjects,
     aggregates: {
         scareCrowTheCharacter: {
@@ -39,7 +39,7 @@ const scarecrowDomain: Domain<typeof scareCrowObjects> = {
             name: "sawDorothy"
         }
     }
-} satisfies Domain<typeof scareCrowObjects>
+} satisfies DomainDef<typeof scareCrowObjects>
 
 const tinManObjects = {
     entities: {
@@ -51,9 +51,9 @@ const tinManObjects = {
     values: {
         hasHeart: false
     }
-} satisfies DomainObjectDef;
+} satisfies DomainObjectsDef;
 
-const tinManDomain: Domain<typeof tinManObjects> = {
+const tinManDomain: DomainDef<typeof tinManObjects> = {
     objects: tinManObjects,
     aggregates: {
         tinManTheCharacter: {
@@ -66,7 +66,7 @@ const tinManDomain: Domain<typeof tinManObjects> = {
             name: "sawDorothy"
         }
     }
-} satisfies Domain<typeof tinManObjects>
+} satisfies DomainDef<typeof tinManObjects>
 
 
 
@@ -91,11 +91,11 @@ const ozDomain = {
         }
     }
 
-} satisfies Domain<typeof dorothyObjects>
+} satisfies DomainDef<typeof dorothyObjects>
 
 const dorothyMeetsTheScarecrow = {
     story: "When Dorothy meets the Scarecrow",
-    domains: ozDomain,
+    domain: ozDomain,
     scenes: {
         DOROTHY_LOST_HER_WAY: {
             story: "Dorothy lost her way",
@@ -158,7 +158,7 @@ const dorothyMeetsTheScarecrow = {
 
 const dorothyMeetsTheLion = {
     story: "When Dorothy meets the Lion",
-    domains: ozDomain,
+    domain: ozDomain,
     scenes: {
         THREE_IN_THE_FOREST: {
             story: "The three were walking in the forest",
@@ -190,7 +190,7 @@ const dorothyMeetsTheLion = {
 
 const dorothyMeetsScarecrowAndLion = {
     story: "When Dorothy meets the Scarecrow and the Lion",
-    domains: ozDomain,
+    domain: ozDomain,
     scenes: {
         dorothyMeetsTheScarecrow,
         dorothyMeetsTheLion,
@@ -199,7 +199,7 @@ const dorothyMeetsScarecrowAndLion = {
 
 const dorothyMeetsHerCompanions = {
     story: "Dorothy meets her companions",
-    domains: ozDomain,
+    domain: ozDomain,
     scenes: {
         dorothyMeetsScarecrowAndLion,
     }

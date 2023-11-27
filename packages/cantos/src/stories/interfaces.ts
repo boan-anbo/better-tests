@@ -5,7 +5,7 @@ import {IStoryScripts} from "@src/stories/story-types.ts";
 import {StoryStatus} from "@src/stories/status.ts";
 import {StoryOptions} from "@src/stories/story-options.ts";
 
-export interface Test<DOMAIN extends Domain = typeof EmptyDomain> {
+export interface Test<DOMAIN extends DomainDef = typeof EmptyDomain> {
     /**
      * The type of tests.
      */
@@ -67,22 +67,22 @@ export interface DomainObjects<
 }
 
 
-export interface Domain<
+export interface DomainDef<
     TOBjects extends DomainObjects = typeof EmptyRecord,
     TEvents extends DomainEvent = DomainEvent,
     TCommands extends DomainCommand = DomainCommand,
 > {
-    subdomains?: Record<string, Domain<any>>;
+    subdomains?: Record<string, DomainDef<any>>;
     objects?: TOBjects;
     aggregates?: Record<string, Aggregate<TOBjects>>;
     events?: Record<string, TEvents>;
     commands?: Record<string, TCommands>;
 }
 
-export type DomainObjectDef<T extends DomainObjects = DomainObjects> = T
+export type DomainObjectsDef<T extends DomainObjects = DomainObjects> = T
 
 
-export type UserDomain<T extends Domain> = T & Domain;
+export type UserDomain<T extends DomainDef> = T & DomainDef;
 
 
 export interface RuleExamples {
@@ -91,14 +91,14 @@ export interface RuleExamples {
 }
 
 export const EmptyRecord = {} as const;
-export const EmptyDomain: Domain<any> = {} as const;
+export const EmptyDomain: DomainDef<any> = {} as const;
 // Dumb, or smart?, way to debug type inference: change never to a definite type, such as number, and see if `who` field inferre to that type, if it is, debug there, if not, move up the chain.
 // Simplified type to extract entity keys from a domain
-export type DomainEntityKeys<T extends Domain> = T['objects'] extends DomainObjects ? keyof T['objects']['entities'] : string;
+export type DomainEntityKeys<T extends DomainDef> = T['objects'] extends DomainObjects ? keyof T['objects']['entities'] : string;
 
 // Revised Who<T> type using the simplified utility type
-export type Who<T extends Domain> = {
-    [K in keyof T]: T[K] extends Domain<any>
+export type Who<T extends DomainDef> = {
+    [K in keyof T]: T[K] extends DomainDef<any>
         ? DomainEntityKeys<T[K]>
         : string;
 }[keyof T];
@@ -108,7 +108,7 @@ export type StringRecord = Record<string, string>;
 /**
  * Bare Act is the base structure for any entity or behavior without methods or nested entities.
  */
-export interface IStoryScript<DOMAIN extends Domain = typeof EmptyRecord> {
+export interface IStoryScript<DOMAIN extends DomainDef = typeof EmptyRecord> {
     /**
      * The actors of the story.
      *
@@ -132,7 +132,7 @@ export interface IStoryScript<DOMAIN extends Domain = typeof EmptyRecord> {
      * The order of the story among its sibling stories.
      */
     order?: number;
-    domains?: DOMAIN;
+    domain?: DOMAIN;
     /**
      * Story-by-Story options that can override the global story options.
      */
@@ -192,7 +192,7 @@ export interface IStoryScript<DOMAIN extends Domain = typeof EmptyRecord> {
 
 }
 
-export interface IStory<DOMAIN extends Domain = typeof EmptyDomain> extends IStoryScript<DOMAIN> {
+export interface IStory<DOMAIN extends DomainDef = typeof EmptyDomain> extends IStoryScript<DOMAIN> {
     scenes: Scenes<DOMAIN>;
     testId: () => string;
     path: () => string;
