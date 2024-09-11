@@ -26,7 +26,6 @@ export const viteConfig: UserConfig = {
             tsconfigPath: 'tsconfig.build.json',
             rollupTypes: true
         }),
-        eslintPlugin()
     ],
     test: {
         include: ['**/*.test.ts'],
