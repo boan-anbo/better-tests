@@ -1,4 +1,4 @@
-import {TestKinds} from "@src/stories/test-kinds.ts";
+import { TestKinds } from "@src/stories/test-kinds.ts";
 
 export const STORY_DEFAULTS = {
     DEFAULT_NARRATIVE: "The story goes",
@@ -8,7 +8,7 @@ export const STORY_DEFAULTS = {
 export const STORY_TELLER = {
     LEFT_BRACKET: "[",
     RIGHT_BRACKET: "]",
-    SPACE : " ",
+    SPACE: " ",
 }
 
 export const GWT_DESCRIPTIONS = {

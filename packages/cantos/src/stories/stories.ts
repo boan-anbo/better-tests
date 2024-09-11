@@ -2,14 +2,7 @@ import {PartialDeep} from "type-fest";
 import {STORY_DEFAULTS} from "@src/consts.ts";
 import {Scenes} from "@src/entrance.ts";
 
-import {
-    DomainDef,
-    EmptyRecord,
-    IStory,
-    IStoryScript,
-    Test,
-    Who
-} from "@src/stories/interfaces.ts";
+import {DomainDef, EmptyRecord, IStory, IStoryScript, Test, Who} from "@src/stories/interfaces.ts";
 import {getPath, populateActPath} from "@src/stories/utils.ts";
 import {TestKind} from "@src/stories/test-kinds.ts";
 import {printTag, printTestTags, printWho, tellStory} from "@src/stories/storyteller.ts";
@@ -42,7 +35,6 @@ class StoryScript implements IStoryScript {
 }
 
 
-
 export class Story<DOMAIN extends DomainDef = typeof EmptyRecord> extends StoryScript implements IStory<DOMAIN> {
     action?: Scenes<DOMAIN>;
     context?: Scenes<DOMAIN>;
@@ -65,11 +57,13 @@ export class Story<DOMAIN extends DomainDef = typeof EmptyRecord> extends StoryS
         return undefined
     }
 
-    // FIXME: broken for new who, context, when, then, so
-    long = () => tellStory(this, StoryVersion.LONG);
+    appendAddendum = (story: string, addendum?: string) => addendum ? `${story} ${addendum}` : story;
 
-    short = () => tellStory(this, StoryVersion.SHORT)
-    tell = () => tellStory(this, StoryVersion.NO_PREFERENCE);
+    // FIXME: broken for new who, context, when, then, so
+    long = (addendum?: string) => this.appendAddendum(tellStory(this, StoryVersion.LONG), addendum);
+
+    short = (addendum?: string) => this.appendAddendum(tellStory(this, StoryVersion.SHORT), addendum);
+    tell = (addendum?: string) => this.appendAddendum(tellStory(this, StoryVersion.NO_PREFERENCE), addendum);
 
     /**
      * Tell the story but with test kinds as tag prefixes, e.g. `[UNIT] [E2E] Story`
