@@ -200,18 +200,26 @@ export interface IStory<DOMAIN extends DomainDef = typeof EmptyDomain> extends I
 
     /**
      * Simply tell the story, using teller preference {@link StoryTellingOptions} to decide whether to tell the short or long version.
+     * 
+     * @remarks
+     * If addendum is provided, it will be appended to the end of the story.
      */
-    tell: () => string;
+    tell: (addendum?: string) => string;
 
     /**
      * Tell the shorter version of the story using the story text.
+     * 
+     * @remarks
+     * If addendum is provided, it will be appended to the end of the story.
      */
-    short: () => string;
+    short: (addendum?: string) => string;
     /**
      * Tell the longer version of the story using the `contexts`, `when`, and `then`, in the form of, for example, `Given ... When ... Then ...`.
      *
      * @remarks
      * If a long description is not provided, it will fallback to the short version.
+     * 
+     * If addendum is provided, it will be appended to the end of the story.
      */
-    long: () => string;
+    long: (addendum?: string) => string;
 }
