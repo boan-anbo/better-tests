@@ -1,11 +1,11 @@
-import {beforeEach, describe, expect, it} from "vitest";
-import { loadScript} from "@src/entrance.ts";
-import {StoryScript} from "@src/stories/story-types.ts";
-import {GenreUserStory} from "@src/stories/story-kinds.ts";
-import {StoryTag} from "@src/stories/story-options.ts";
-import {TestKinds} from "@src/stories/test-kinds.ts";
-import { CommonScences, CommonTest} from "@src/index";
-import {DomainDef, DomainObjectsDef} from "@src/stories/interfaces.ts";
+import { beforeEach, describe, expect, it } from "vitest";
+import { loadScript } from "@src/entrance.ts";
+import { StoryScript } from "@src/stories/story-types.ts";
+import { GenreUserStory } from "@src/stories/story-kinds.ts";
+import { StoryTag } from "@src/stories/story-options.ts";
+import { TestKinds } from "@src/stories/test-kinds.ts";
+import { CommonScences, CommonTest } from "@src/index";
+import { DomainDef, DomainObjectsDef } from "@src/stories/interfaces.ts";
 
 const storyTellDomainObjects = {
     entities: {
@@ -35,6 +35,21 @@ const storyTellerDomain = {
         }
     }
 } satisfies DomainDef<typeof storyTellDomainObjects>
+
+const storyTellerStoryTelling = {
+    story: "Story Telling",
+    domain: storyTellerDomain,
+    scenes: {
+        storyTelling: {
+            who: ["User"],
+            story: "can tell the story",
+        },
+        storyTellingWithAddendum: {
+            who: ["User"],
+            story: "can tell the story with addendum",
+        }
+    }
+} satisfies StoryScript<typeof storyTellerDomain>
 
 const storyTellerStoryWho = {
     who: ["Who"],
@@ -99,6 +114,7 @@ const storyTellerScript = {
     story: "Story Teller",
     domain: storyTellerDomain,
     scenes: {
+        telling: storyTellerStoryTelling,
         who: storyTellerStoryWho,
         tags: storyTellerStoryTags,
     }
@@ -108,8 +124,16 @@ const storyTellerStory = loadScript(storyTellerScript);
 
 
 describe(storyTellerStory.short(), () => {
-    it(CommonScences.SHOULD_WORK.story, () => {
-        expect(CommonScences.SHOULD_WORK.story).toBe(CommonScences.SHOULD_WORK.story);
+
+    const telling = storyTellerStory.scenes.telling;
+    describe(telling.tell(), () => {
+        it(telling.scenes.storyTelling.tell(), () => {
+            expect(telling.tell()).toBe(telling.story);
+        });
+
+        it(telling.scenes.storyTellingWithAddendum.tell(), () => {
+            expect(telling.tell("with addendum")).toBe(`${telling.story} with addendum`);
+        });
     });
 
     const tagsStory = storyTellerStory.scenes.tags;
